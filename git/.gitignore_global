@@ -1,0 +1,23 @@
+# macOS folder metadata — created every time Finder opens a directory
+.DS_Store
+
+# macOS resource fork files — appear when copying files to FAT/exFAT drives
+._*
+
+# macOS Spotlight and Trash on external volumes
+.Spotlight-V100
+.Trashes
+
+# Windows folder view config and thumbnail caches
+Desktop.ini
+Thumbs.db
+
+# Compiled Python bytecode — always regenerated, never belongs in version control
+*.pyc
+
+# Editor/IDE directories — each dev uses different tools, don't pollute the repo
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

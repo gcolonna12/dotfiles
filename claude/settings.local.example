@@ -1,0 +1,11 @@
+{
+  "_comment": "Machine-specific Claude Code settings. Merge into ~/.claude/settings.json after install.",
+  "awsAuthRefresh": "aws sso login --profile cc",
+  "env": {
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "AWS_PROFILE": "cc",
+    "ANTHROPIC_MODEL": "global.anthropic.claude-sonnet-4-6"
+  },
+  "model": "opus",
+  "extraKnownMarketplaces": {}
+}

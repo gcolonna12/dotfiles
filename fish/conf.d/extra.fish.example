@@ -1,0 +1,7 @@
+# ~/.config/fish/conf.d/extra.fish — Machine-specific secrets and work config.
+# Git-ignored. Copy and fill in:  cp ~/dotfiles/fish/conf.d/extra.fish.example ~/.config/fish/conf.d/extra.fish
+
+# set -gx ARTY_USER "your-username"
+# set -gx ARTY_PASSWORD "your-token"
+# set -gx GITHUB_TOKEN "ghp_..."
+# set -gx UV_PUBLISH_PASSWORD "your-token"

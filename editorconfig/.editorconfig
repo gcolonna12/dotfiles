@@ -1,0 +1,21 @@
+# Stop editors from searching parent directories for more .editorconfig files
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+# Unix line endings prevent \r\n vs \n merge conflicts across OS
+end_of_line = lf
+# POSIX requires a final newline; missing it causes noisy one-line diffs
+insert_final_newline = true
+# Invisible trailing whitespace creates phantom diffs that clutter PRs
+trim_trailing_whitespace = true
+
+# Python's PEP8 mandates 4 spaces — override the default here
+[*.py]
+indent_size = 4
+
+# Makefiles break with spaces — tabs are syntactically required
+[Makefile]
+indent_style = tab

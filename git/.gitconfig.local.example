@@ -1,0 +1,20 @@
+# ~/.gitconfig.local — Machine-specific git identity and profile switching.
+# Copy and fill in:  cp ~/dotfiles/git/.gitconfig.local.example ~/.gitconfig.local
+
+[user]
+	name = Your Name
+	email = your@personal-email.com
+
+# Profile switching — override user/email based on repo location.
+# Each included file only needs a [user] section with the overridden name/email.
+#
+# Example ~/.gitconfig-work:
+#   [user]
+#       name = Your Name
+#       email = your@company.com
+
+# [includeIf "gitdir:~/projects/work/"]
+# 	path = ~/.gitconfig-work
+#
+# [includeIf "gitdir:~/projects/personal/"]
+# 	path = ~/.gitconfig-personal
