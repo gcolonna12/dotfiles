@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/gcolonna/**)",
+      "Read(//Users/gcolonna/.config/**)"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+# ~/.zsh/extra — Machine-specific secrets and work config.
+# Git-ignored. Copy and fill in:  cp ~/dotfiles/zsh/extra.example ~/.zsh/extra
+
+# export ARTY_USER="your-username"
+# export ARTY_PASSWORD="your-token"
+# export GITHUB_TOKEN="ghp_..."
+# export UV_PUBLISH_PASSWORD="your-token"

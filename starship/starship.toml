@@ -1,0 +1,53 @@
+# Inspired by Mathias' Solarized prompt: user @ host in dir on branch [status]
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$java\
+$nodejs\
+$rust\
+$golang\
+$cmd_duration\
+$line_break\
+$character"""
+
+[username]
+# Only show when root or SSH — you already know who you are locally
+show_always = false
+style_user = "bold yellow"
+# Red so it screams "you're root, be careful"
+style_root = "bold red"
+
+[hostname]
+# Only appears over SSH so you always know when you're on a remote box
+ssh_only = true
+style = "bold red"
+
+[directory]
+style = "bold green"
+# Show the full path — no abbreviation or truncation
+truncate_to_repo = false
+truncation_length = 100
+
+[git_branch]
+style = "bold purple"
+
+[git_status]
+# Same symbols Mathias uses: + staged, ! modified, ? untracked, $ stashed
+staged = "[+](green)"
+modified = "[!](yellow)"
+untracked = "[?](blue)"
+stashed = "[$](cyan)"
+
+[cmd_duration]
+# Only show elapsed time for slow commands — useful for spotting bottlenecks
+min_time = 2000
+
+[character]
+# Green on success, red on failure — instant visual feedback on last command
+success_symbol = "[\\$](bold white)"
+error_symbol = "[\\$](bold red)"

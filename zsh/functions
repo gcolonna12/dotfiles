@@ -1,0 +1,40 @@
+# Create a directory and cd into it in one step — avoids the mkdir then cd dance
+function mkd() {
+    mkdir -p "$@" && cd "$_"
+}
+
+# cd to whatever folder Finder currently has open — bridges GUI and terminal workflows
+function cdf() {
+    cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
+}
+
+# Human-readable file/directory sizes — du's default output is in blocks which nobody thinks in
+function fs() {
+    if [[ -n "$@" ]]; then
+        du -sh -- "$@"
+    else
+        # No args: show sizes of everything in current directory including dotfiles
+        du -sh .[^.]* ./*
+    fi
+}
+
+# Use git's colored word-level diff instead of line-level — much easier to spot
+# what actually changed in a line, especially in prose or config files
+function diff() {
+    git diff --no-index --color-words "$@"
+}
+
+# Open current directory (or given path) in Finder — saves reaching for the mouse
+function o() {
+    if [ $# -eq 0 ]; then
+        open .
+    else
+        open "$@"
+    fi
+}
+
+# Pretty tree with colors and dotfiles, skipping .git and node_modules noise.
+# Pipes to less only if the output won't fit on one screen (-F quits if it fits).
+function tre() {
+    tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX
+}

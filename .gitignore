@@ -1,0 +1,7 @@
+.DS_Store
+
+# Local configs with secrets — only .example templates are tracked
+zsh/extra
+fish/conf.d/extra.fish
+git/.gitconfig.local
+claude/settings.local
