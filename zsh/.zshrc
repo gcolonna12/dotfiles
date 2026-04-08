@@ -45,12 +45,12 @@ setopt HIST_IGNORE_SPACE
 # which is why this is at the bottom — same pattern Mathias uses in .bash_profile.
 if type brew &>/dev/null; then
     FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-    autoload -Uz compinit
-    compinit
 fi
+autoload -Uz compinit
+compinit
 
 # zoxide tracks your most-visited directories so `z foo` jumps to ~/projects/foo
-eval "$(zoxide init zsh)"
+if command -v zoxide &>/dev/null; then eval "$(zoxide init zsh)"; fi
 
 # Starship gives us a consistent prompt across fish and zsh from one config
-eval "$(starship init zsh)"
+if command -v starship &>/dev/null; then eval "$(starship init zsh)"; fi

@@ -1,0 +1,19 @@
+# Persist connections so you don't re-enter passphrases each session.
+# UseKeychain is a macOS extension — IgnoreUnknown makes this file safe on Linux.
+Host *
+	AddKeysToAgent yes
+	IgnoreUnknown UseKeychain
+	UseKeychain yes
+	IdentityFile ~/.ssh/id_ed25519
+
+# GitHub — personal account
+Host github.com
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/id_ed25519
+
+# GitHub — work account (if using a separate key)
+# Host github-work
+# 	HostName github.com
+# 	User git
+# 	IdentityFile ~/.ssh/id_ed25519_work

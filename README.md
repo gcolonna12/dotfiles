@@ -1,25 +1,47 @@
 # dotfiles
 
-Personal dotfiles for macOS with **fish** (default shell), **zsh** (fallback), **iTerm2**, and **Starship** prompt.
+Personal dotfiles for macOS and Linux with **fish** (default shell), **zsh** (fallback), and **Starship** prompt.
 
 Inspired by [Mathias Bynens' dotfiles](https://github.com/mathiasbynens/dotfiles).
 
 ## Setup on a new machine
+
+### macOS
 
 ```bash
 # 1. Clone the repo
 git clone https://github.com/gcolonna12/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
-# 2. Install Homebrew packages (installs Homebrew itself if missing)
-bash brew.sh
+# 2. Install packages
+bash bootstrap.sh        # core: git, vim, tmux, fish
+bash bootstrap.sh full   # + eza, bat, fd, rg, starship, zoxide
 
-# 3. Symlink all configs to their expected locations
+# 3. Symlink all configs
 bash install.sh
 
 # 4. Apply macOS system defaults (then reboot)
 bash macos/.macos
 ```
+
+### Linux (Debian/Ubuntu) — server or edge device
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/gcolonna12/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+
+# 2. Install packages
+bash bootstrap.sh        # core: git, vim, tmux, fish
+bash bootstrap.sh full   # + eza, bat, fd, rg, starship, zoxide
+
+# 3. Symlink all configs
+bash install.sh
+```
+
+The `full` tier is optional — configs detect installed tools automatically and fall back to
+system defaults when they're absent. On constrained devices (small RAM, limited storage),
+`core` is enough to be productive.
 
 ## Post-install setup
 
@@ -29,7 +51,7 @@ Git user info and profile switching are machine-specific:
 
 ```bash
 cp ~/dotfiles/git/.gitconfig.local.example ~/.gitconfig.local
-# Edit with your name, email, and any includeIf profile overrides
+# Edit with your name, email, credential helper, and any includeIf profile overrides
 ```
 
 ### Secrets
@@ -43,7 +65,7 @@ cp ~/dotfiles/fish/conf.d/extra.fish.example ~/.config/fish/conf.d/extra.fish
 
 ### SSH keys
 
-The SSH config template is included, but keys must be generated per machine:
+The SSH config is included, but keys must be generated per machine:
 
 ```bash
 ssh-keygen -t ed25519 -C "your@email.com"
@@ -67,7 +89,9 @@ For multiple GitHub accounts, uncomment the `github-work` host in `ssh/config` a
 | `curl/` | Sensible timeouts and auto-referer |
 | `wget/` | Sensible timeouts, retries, and timestamping |
 | `editorconfig/` | 2-space indent, UTF-8, LF line endings, trim trailing whitespace |
-| `iterm2/` | Solarized Dark color theme |
+| `ssh/` | SSH client config with GitHub account setup |
+| `claude/` | Claude Code settings and project instructions |
+| `iterm2/` | Solarized Dark color theme (macOS only) |
 | `macos/` | macOS defaults — Finder, Dock, screenshots, dev-friendly settings |
 | `bin/` | Personal scripts available on `$PATH` |
 

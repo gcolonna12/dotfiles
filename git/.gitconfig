@@ -171,11 +171,6 @@
 
 	insteadOf = "gist:"
 
-[credential]
-
-	# Store credentials in macOS Keychain instead of plaintext
-	helper = osxkeychain
-
 [init]
 
 	# New repos default to main — the modern standard

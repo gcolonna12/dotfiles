@@ -8,7 +8,11 @@ fish_add_path ~/bin
 # explicit opt-in for each.
 
 # zoxide tracks your most-visited directories so `z foo` jumps to ~/projects/foo
-zoxide init fish | source
+if command -q zoxide
+    zoxide init fish | source
+end
 
 # Starship gives us a consistent prompt across fish and zsh from one config
-starship init fish | source
+if command -q starship
+    starship init fish | source
+end

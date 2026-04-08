@@ -18,3 +18,9 @@
 #
 # [includeIf "gitdir:~/projects/personal/"]
 # 	path = ~/.gitconfig-personal
+
+# Credential helper — set this per machine:
+#   macOS:  helper = osxkeychain
+#   Linux:  helper = cache   (or libsecret, store, etc.)
+# [credential]
+# 	helper = osxkeychain
