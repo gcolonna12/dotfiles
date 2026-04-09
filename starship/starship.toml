@@ -1,5 +1,3 @@
-# Inspired by Mathias' Solarized prompt: user @ host in dir on branch [status]
-
 format = """
 $username\
 $hostname\
@@ -28,7 +26,7 @@ ssh_only = true
 style = "bold red"
 
 [directory]
-style = "bold green"
+style = "green"
 # Show the full path — no abbreviation or truncation
 truncate_to_repo = false
 truncation_length = 100
@@ -49,5 +47,5 @@ min_time = 2000
 
 [character]
 # Green on success, red on failure — instant visual feedback on last command
-success_symbol = "[\\$](bold white)"
+success_symbol = "[\\$](bold)"
 error_symbol = "[\\$](bold red)"
