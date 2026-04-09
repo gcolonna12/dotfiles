@@ -53,6 +53,7 @@
       "Selection Color (Dark)":     { "Color Space": "sRGB", "Red Component": 0.278, "Green Component": 0.322, "Blue Component": 0.345, "Alpha Component": 1 },
       "Selected Text Color (Dark)": { "Color Space": "sRGB", "Red Component": 0.827, "Green Component": 0.776, "Blue Component": 0.667, "Alpha Component": 1 },
 
+      "Option Key Sends": 2,
       "Keyboard Map": {
         "0x7f-0x100000": {
           "Text": "0x15",
