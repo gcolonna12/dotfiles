@@ -1,0 +1,205 @@
+#!/usr/bin/env bash
+
+# macOS system defaults — run once on a new machine, then reboot.
+# Close System Settings first to prevent it from overriding these changes.
+osascript -e 'tell application "System Settings" to quit'
+
+# Sudo upfront and keep it alive for the duration of the script
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+###############################################################################
+# General UI/UX (developer essentials)                                        #
+###############################################################################
+
+# The collapsed save panel hides the folder picker — infuriating when you
+# need to choose where to save
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+
+# Same annoyance with the collapsed print panel
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+# iCloud is not where code belongs — new docs save to disk
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+# Auto-capitalization turns `git` into `Git` — breaks commands when copy-pasting
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+# Smart dashes turn `--flag` into `—flag` — breaks every CLI flag
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+# Double-space inserts a period — disastrous when typing code
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+
+# Curly quotes turn "string" into \u201cstring\u201d — breaks code and configs
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+
+# Auto-correct changes technical terms to nonsense
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+###############################################################################
+# Screen                                                                      #
+###############################################################################
+
+# Require password immediately after sleep — basic security hygiene
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+# Screenshots go to Desktop where they're easy to find and attach to PRs/issues
+defaults write com.apple.screencapture location -string "${HOME}/Desktop"
+
+# PNG preserves text clarity — JPG artifacts make code screenshots hard to read
+defaults write com.apple.screencapture type -string "png"
+
+# The macOS screenshot drop shadow adds visual noise and extra padding
+defaults write com.apple.screencapture disable-shadow -bool true
+
+###############################################################################
+# Finder                                                                      #
+###############################################################################
+
+# Hidden extensions mean you can't tell .sh from .sh.txt — dangerous
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# Status bar shows item count and free space — useful at a glance
+defaults write com.apple.finder ShowStatusBar -bool true
+
+# Path bar shows the full directory breadcrumb at the bottom of each window
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Full POSIX path in the title bar — copy-pasteable for terminal use
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+# Folders first makes directory-heavy projects navigable
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# Default search scopes to the current folder, not "This Mac" — you're almost
+# always looking for something in the folder you're already in
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# The "are you sure you want to change the extension?" dialog adds friction
+# when renaming files — devs rename files all the time
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# .DS_Store on network and USB volumes pollutes shared drives and repos
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+# List view is the most info-dense and readable for large directories
+# (icnv = icons, clmv = columns, glyv = gallery)
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
+# ~/Library is hidden by default but devs need it for app configs,
+# caches, and debugging
+chflags nohidden ~/Library
+
+# Expand "General", "Open with", and "Permissions" in the Get Info window
+defaults write com.apple.finder FXInfoPanesExpanded -dict \
+	General -bool true \
+	OpenWith -bool true \
+	Privileges -bool true
+
+###############################################################################
+# Dock                                                                        #
+###############################################################################
+
+# 36px icons — small enough to fit more apps, large enough to click
+defaults write com.apple.dock tilesize -int 36
+
+# Scale effect is faster and less distracting than the default Genie
+defaults write com.apple.dock mineffect -string "scale"
+
+# Minimize into the app icon instead of creating a new Dock tile per window
+defaults write com.apple.dock minimize-to-application -bool true
+
+# Dots under running apps — visual indicator of what's open
+defaults write com.apple.dock show-process-indicators -bool true
+
+# No bounce animation when launching apps — saves a second of waiting
+defaults write com.apple.dock launchanim -bool false
+
+# Faster Mission Control animation — the default is sluggish
+defaults write com.apple.dock expose-animation-duration -float 0.1
+
+# Prevent Spaces from auto-reordering — you build muscle memory for Space positions,
+# then macOS shuffles them based on recent use
+defaults write com.apple.dock mru-spaces -bool false
+
+# No delay when showing/hiding the Dock — instant response
+defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock autohide-time-modifier -float 0
+
+# Auto-hide the Dock to reclaim screen real estate
+defaults write com.apple.dock autohide -bool true
+
+# Hidden app icons go translucent so you can tell them apart
+defaults write com.apple.dock showhidden -bool true
+
+# "Recent apps" section clutters the Dock with apps you opened once
+defaults write com.apple.dock show-recents -bool false
+
+###############################################################################
+# iTerm2                                                                      #
+###############################################################################
+
+# The quit confirmation dialog is annoying when you know you want to close
+defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+
+###############################################################################
+# TextEdit                                                                    #
+###############################################################################
+
+# TextEdit defaults to rich text — useless for quick code/config editing
+defaults write com.apple.TextEdit RichText -int 0
+# Open and save as UTF-8 — not the legacy Mac Roman encoding
+defaults write com.apple.TextEdit PlainTextEncoding -int 4
+defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
+###############################################################################
+# Photos                                                                      #
+###############################################################################
+
+# Photos.app launches every time you plug in a phone to charge — annoying
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+
+###############################################################################
+# Activity Monitor                                                            #
+###############################################################################
+
+# Show the main window on launch (instead of nothing)
+defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+
+# CPU graph in the Dock icon — at a glance system health
+defaults write com.apple.ActivityMonitor IconType -int 5
+
+# Show all processes, not just "My Processes"
+defaults write com.apple.ActivityMonitor ShowCategory -int 0
+
+# Sort by CPU usage by default — the first thing you look for
+defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+defaults write com.apple.ActivityMonitor SortDirection -int 0
+
+###############################################################################
+# Mac App Store & Software Update                                             #
+###############################################################################
+
+# Check for updates daily instead of weekly
+defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
+
+# Download updates automatically in the background
+defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
+
+# Auto-install security updates — these patch critical vulnerabilities
+defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
+
+###############################################################################
+# Apply changes                                                               #
+###############################################################################
+
+for app in "Activity Monitor" "Dock" "Finder" "Photos" "SystemUIServer"; do
+	killall "${app}" &> /dev/null
+done
+
+echo "Done. Some changes require a logout/restart to take effect."

@@ -1,0 +1,110 @@
+# Create a directory and cd into it in one step — avoids the mkdir then cd dance
+function mkd() {
+    mkdir -p "$@" && cd "$_"
+}
+
+# cd to whatever folder Finder currently has open — bridges GUI and terminal workflows
+function cdf() {
+    cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
+}
+
+# Human-readable file/directory sizes — du's default output is in blocks which nobody thinks in
+function fs() {
+    if [[ -n "$@" ]]; then
+        du -sh -- "$@"
+    else
+        # No args: show sizes of everything in current directory including dotfiles
+        du -sh .[^.]* ./*
+    fi
+}
+
+# Use git's colored word-level diff instead of line-level — much easier to spot
+# what actually changed in a line, especially in prose or config files
+function diff() {
+    git diff --no-index --color-words "$@"
+}
+
+# Open current directory (or given path) in Finder — saves reaching for the mouse
+function o() {
+    if [ $# -eq 0 ]; then
+        open .
+    else
+        open "$@"
+    fi
+}
+
+# Pretty tree with colors and dotfiles, skipping .git and node_modules noise.
+# Pipes to less only if the output won't fit on one screen (-F quits if it fits).
+function tre() {
+    tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX
+}
+
+# AI-powered git commit: stages diff → LLM generates message → accept/edit/regenerate/cancel
+# From https://gist.github.com/karpathy/1dd0294ef9567971c1e4348a90d69285
+# Requires the `llm` CLI: https://llm.datasette.io/en/stable/
+gcm() {
+    generate_commit_message() {
+        git diff --cached | llm "
+Below is a diff of all staged changes, coming from the command:
+
+\`\`\`
+git diff --cached
+\`\`\`
+
+Please generate a concise, one-line commit message for these changes."
+    }
+
+    read_input() {
+        if [ -n "$ZSH_VERSION" ]; then
+            echo -n "$1"
+            read -r REPLY
+        else
+            read -p "$1" -r REPLY
+        fi
+    }
+
+    echo "Generating AI-powered commit message..."
+    commit_message=$(generate_commit_message)
+
+    while true; do
+        echo -e "\nProposed commit message:"
+        echo "$commit_message"
+
+        read_input "Do you want to (a)ccept, (e)dit, (r)egenerate, or (c)ancel? "
+        choice=$REPLY
+
+        case "$choice" in
+            a|A )
+                if git commit -m "$commit_message"; then
+                    echo "Changes committed successfully!"
+                    return 0
+                else
+                    echo "Commit failed. Please check your changes and try again."
+                    return 1
+                fi
+                ;;
+            e|E )
+                read_input "Enter your commit message: "
+                commit_message=$REPLY
+                if [ -n "$commit_message" ] && git commit -m "$commit_message"; then
+                    echo "Changes committed successfully with your message!"
+                    return 0
+                else
+                    echo "Commit failed. Please check your message and try again."
+                    return 1
+                fi
+                ;;
+            r|R )
+                echo "Regenerating commit message..."
+                commit_message=$(generate_commit_message)
+                ;;
+            c|C )
+                echo "Commit cancelled."
+                return 1
+                ;;
+            * )
+                echo "Invalid choice. Please try again."
+                ;;
+        esac
+    done
+}

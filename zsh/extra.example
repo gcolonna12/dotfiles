@@ -1,0 +1,16 @@
+# ~/.zsh/extra — Machine-specific secrets and work config.
+# Git-ignored. Copy and fill in:  cp ~/dotfiles/zsh/extra.example ~/.zsh/extra
+
+# export ARTY_USER="your-username"
+# export ARTY_PASSWORD="your-token"
+# export GITHUB_TOKEN="ghp_..."
+# export UV_PUBLISH_PASSWORD="your-token"
+
+# Claude Code — uncomment and fill in for Bedrock/AWS
+# export CLAUDE_CODE_USE_BEDROCK=1
+# export AWS_PROFILE=your-profile
+# export ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION=us-east-1
+# export ANTHROPIC_MODEL=global.anthropic.claude-opus-4-6-v1
+# export ANTHROPIC_DEFAULT_SONNET_MODEL=global.anthropic.claude-sonnet-4-6
+# export ANTHROPIC_DEFAULT_OPUS_MODEL=global.anthropic.claude-opus-4-6-v1
+# export ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-haiku-4-5-20251001-v1:0

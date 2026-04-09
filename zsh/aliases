@@ -1,0 +1,78 @@
+# === Navigation ===
+# Zsh doesn't have built-in multi-level .., these save keystrokes for deeper traversal
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias dl="cd ~/Downloads"
+alias dt="cd ~/Desktop"
+# Single-letter git saves hundreds of keystrokes per day
+alias g="git"
+
+# === Modern CLI replacements ===
+# Only aliased when the tool is installed — falls back to the system default otherwise.
+
+# eza: ls replacement with git status, icons, and sane color defaults
+if command -v eza &>/dev/null; then
+    alias ls="eza"
+    alias l="eza -l"
+    # -a shows dotfiles, --git adds a git status column per file
+    alias la="eza -la --git"
+    # --only-dirs is cleaner than piping through grep
+    alias lsd="eza -lD"
+    # tree is built into eza — no need for a separate `tree` install for basic use
+    alias lt="eza -T --level=2"
+fi
+
+# bat: cat with syntax highlighting, line numbers, and git diff markers
+if command -v bat  &>/dev/null; then alias cat="bat";  fi
+
+# fd: find replacement — `fd pattern` instead of `find . -name '*pattern*'`
+if command -v fd   &>/dev/null; then alias find="fd";  fi
+
+# ripgrep: grep replacement, respects .gitignore and is 10-100x faster
+if command -v rg   &>/dev/null; then alias grep="rg";  fi
+
+# tldr: community help pages — `help git commit` instead of `man git-commit`
+if command -v tldr &>/dev/null; then alias help="tldr"; fi
+
+# === Networking ===
+# Quick way to check "what IP does the internet see me as?"
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+# === Dev Tools ===
+# Print PATH one entry per line — makes it readable when debugging PATH issues
+alias path='echo -e ${PATH//:/\\n}'
+# Reload shell config without opening a new terminal
+alias reload="exec ${SHELL} -l"
+# The trailing space lets aliases work after sudo (e.g., `sudo ll` expands the ll alias)
+alias sudo='sudo '
+# Pipe-friendly map: `find . -name '*.py' | map dirname | sort -u`
+alias map="xargs -n1"
+
+# === macOS only ===
+if [[ $(uname) == "Darwin" ]]; then
+    alias localip="ipconfig getifaddr en0"
+    # Nuclear option when DNS is misbehaving (cached stale records, etc.)
+    alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
+    # .DS_Store files are metadata litter that macOS drops in every directory.
+    # Use /usr/bin/find explicitly — `find` may be aliased to fd (different syntax).
+    alias cleanup="/usr/bin/find . -type f -name '*.DS_Store' -ls -delete"
+    # Toggle hidden files in Finder
+    alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+    alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+    # Clean desktop before screen sharing or presentations
+    alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+    alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+    # Lock screen when stepping away — muscle memory beats Ctrl+Cmd+Q
+    alias afk="pmset displaysleepnow"
+    # Instant mute/unmute without touching the menu bar
+    alias stfu="osascript -e 'set volume output muted true'"
+    alias pumpitup="osascript -e 'set volume output volume 100'"
+    # Fix "Open With" menu showing duplicate entries after app updates
+    alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
+    # Update everything in one shot — run this weekly to stay current
+    alias update="sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup"
+    # Pipe anything into this to copy it without a trailing newline
+    alias c="tr -d '\n' | pbcopy"
+fi

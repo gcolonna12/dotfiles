@@ -1,0 +1,37 @@
+# Case-insensitive tab completion — `doc<Tab>` finds `Documents/` on macOS
+set completion-ignore-case on
+
+# Show all completions immediately instead of prompting "Display all N possibilities?"
+set show-all-if-ambiguous on
+
+# Symlinks to directories get a trailing / so you can keep typing the path
+set mark-symlinked-directories on
+
+# THE KILLER FEATURE: type a prefix then Up/Down to search only matching history.
+# e.g., type `git` then Up only cycles through commands starting with `git`
+"\e[B": history-search-forward
+"\e[A": history-search-backward
+
+# Don't show hidden files unless you explicitly type a dot — reduces noise
+set match-hidden-files off
+
+# Don't paginate completions — show everything at once
+set page-completions off
+
+# Only ask before showing if there are more than 200 matches (generous threshold)
+set completion-query-items 200
+
+# Append file type indicators (/ for dirs, * for executables, @ for symlinks)
+set visible-stats on
+
+# Prevents doubling text when Tab-completing with cursor in the middle of a word.
+# Without this, completing "cd ~/src/mozil|la" (cursor at |) produces "cd ~/src/mozillala"
+set skip-completed-text on
+
+# Proper UTF-8 support — without these, accented characters show as escape sequences
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# Alt+Delete to delete the word before the cursor (like Opt+Backspace in macOS)
+"\e[3;3~": kill-word

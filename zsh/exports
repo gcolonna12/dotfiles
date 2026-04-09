@@ -1,0 +1,16 @@
+# Default editor for git commits, crontab, etc.
+export EDITOR='vim'
+
+# Prevents Python from choking on non-ASCII characters in pipes and redirects
+export PYTHONIOENCODING='UTF-8'
+
+# Consistent encoding across all tools — prevents locale-dependent bugs in scripts
+export LANG='en_US.UTF-8'
+export LC_ALL='en_US.UTF-8'
+
+# Makes man page section headers yellow instead of bold-only — easier to scan
+export LESS_TERMCAP_md="${yellow}"
+
+# By default, quitting less clears the screen — this keeps the content visible
+# so you can refer back to it without re-opening the man page
+export MANPAGER='less -X'
