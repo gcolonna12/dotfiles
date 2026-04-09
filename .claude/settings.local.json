@@ -38,7 +38,21 @@
       "WebFetch(domain:man7.org)",
       "WebFetch(domain:www.hamvocke.com)",
       "WebFetch(domain:tao-of-tmux.readthedocs.io)",
-      "WebFetch(domain:arcolinux.com)"
+      "WebFetch(domain:arcolinux.com)",
+      "Bash(/bin/ls -R /Users/gcolonna/VSCode_Projects/personal/dotfiles)",
+      "WebFetch(domain:missing.csail.mit.edu)",
+      "Bash(curl -sL https://missing.csail.mit.edu/2026/development-environment/)",
+      "Bash(curl -sL https://missing.csail.mit.edu/2026/course-shell/)",
+      "Bash(curl -sL https://missing.csail.mit.edu/2020/potpourri/)",
+      "WebFetch(domain:fishshell.com)",
+      "Bash(gh issue:*)",
+      "Bash(gh pr:*)",
+      "Bash(cat -n /Users/gcolonna/VSCode_Projects/personal/dotfiles/macos/*.sh)",
+      "Bash(gh release:*)",
+      "Bash(fish --version 2>&1)",
+      "Bash(python3 -c \"import sys,json,base64; print\\(base64.b64decode\\(json.load\\(sys.stdin\\)[''''content'''']\\).decode\\(\\)\\)\")",
+      "Bash(col -b)",
+      "Bash(/usr/bin/grep -E \"mouse_|cursor_\")"
     ]
   }
 }
