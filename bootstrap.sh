@@ -20,14 +20,17 @@ if [ "$OS" = "Darwin" ]; then
         [ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
 
-    brew update && brew upgrade
+    brew update
 
     echo "=== Core ==="
     brew install git git-lfs vim tmux fish wget coreutils findutils gnu-sed grep
 
     if [ "$TIER" = "full" ]; then
         echo "=== Full ==="
-        brew install eza bat fd ripgrep zoxide starship tldr tree
+        brew install eza bat fd ripgrep zoxide starship tlrc tree
+        brew install --cask iterm2 claude-code raycast stats
+        # Clear Gatekeeper quarantine on claude — macOS blocks unsigned/unnotarized CLIs
+        xattr -d com.apple.quarantine "$(command -v claude)" 2>/dev/null || true
     fi
 
     # Set fish as default shell

@@ -5,3 +5,12 @@
 # set -gx ARTY_PASSWORD "your-token"
 # set -gx GITHUB_TOKEN "ghp_..."
 # set -gx UV_PUBLISH_PASSWORD "your-token"
+
+# Claude Code — uncomment and fill in for Bedrock/AWS
+# set -gx CLAUDE_CODE_USE_BEDROCK 1
+# set -gx AWS_PROFILE your-profile
+# set -gx ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION us-east-1
+# set -gx ANTHROPIC_MODEL global.anthropic.claude-opus-4-6-v1
+# set -gx ANTHROPIC_DEFAULT_SONNET_MODEL global.anthropic.claude-sonnet-4-6
+# set -gx ANTHROPIC_DEFAULT_OPUS_MODEL global.anthropic.claude-opus-4-6-v1
+# set -gx ANTHROPIC_DEFAULT_HAIKU_MODEL claude-haiku-4-5-20251001-v1:0

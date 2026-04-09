@@ -1,7 +1,10 @@
-" Solarized Dark theme — consistent with our Starship prompt colors
-set background=dark
-colorscheme solarized
-let g:solarized_termtrans=1
+" Auto-detect macOS light/dark mode; defaults to light on Linux.
+" Colors come from the terminal palette (set in iTerm2) — no vim plugin needed.
+if system('defaults read -g AppleInterfaceStyle 2>/dev/null') =~ 'Dark'
+  set background=dark
+else
+  set background=light
+endif
 
 " Disable vi compatibility — unlocks all vim features (some distros still default to vi mode)
 set nocompatible
