@@ -27,10 +27,13 @@ if [ "$OS" = "Darwin" ]; then
 
     if [ "$TIER" = "full" ]; then
         echo "=== Full ==="
-        brew install eza bat fd ripgrep zoxide starship tlrc tree
+        brew install node eza bat fd ripgrep zoxide starship tlrc tree
         brew install --cask iterm2 claude-code raycast stats
         # Clear Gatekeeper quarantine on claude — macOS blocks unsigned/unnotarized CLIs
         xattr -d com.apple.quarantine "$(command -v claude)" 2>/dev/null || true
+
+        echo "=== Language servers (Claude Code intelligence) ==="
+        npm install -g pyright typescript-language-server typescript
     fi
 
     # Set fish as default shell
@@ -97,6 +100,15 @@ elif [ "$OS" = "Linux" ]; then
             echo "  Installing Starship..."
             curl -sSf https://starship.rs/install.sh | sh -s -- --yes
         fi
+
+        # Node.js (for language servers)
+        if ! command -v node &>/dev/null; then
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+        fi
+
+        echo "=== Language servers (Claude Code intelligence) ==="
+        npm install -g pyright typescript-language-server typescript
     fi
 
     # Set fish as default shell.
