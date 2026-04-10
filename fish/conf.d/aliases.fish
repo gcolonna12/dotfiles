@@ -70,6 +70,8 @@ if test (uname) = "Darwin"
     alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
     # Update everything in one shot — run this weekly to stay current
     alias update="sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup"
+    # Clear macOS quarantine flag on claude after brew install/upgrade
+    alias unquarantine-claude="xattr -dr com.apple.quarantine (brew --prefix)/bin/claude"
     # Pipe anything into this to copy it without a trailing newline
     alias c="tr -d '\n' | pbcopy"
 end
