@@ -59,6 +59,16 @@
           "Text": "0x15",
           "Action": 11,
           "Label": "⌘⌫ Delete Line"
+        },
+        "0xf702-0x100000": {
+          "Text": "OH",
+          "Action": 10,
+          "Label": "⌘← Home"
+        },
+        "0xf703-0x100000": {
+          "Text": "OF",
+          "Action": 10,
+          "Label": "⌘→ End"
         }
       }
     }

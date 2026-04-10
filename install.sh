@@ -112,6 +112,18 @@ mkdir -p "$HOME/.claude"
 link "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 link "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 link "$DOTFILES_DIR/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+# These settings must live in ~/.claude.json (runtime config, not symlinkable).
+# Merge them in without clobbering existing keys.
+if command -v jq &>/dev/null && [ -f "$HOME/.claude.json" ]; then
+    jq '.teammateMode = "auto" | .autoConnectIde = true' "$HOME/.claude.json" > "$HOME/.claude.json.tmp" \
+        && mv "$HOME/.claude.json.tmp" "$HOME/.claude.json"
+    echo "Set teammateMode=auto, autoConnectIde=true in ~/.claude.json"
+elif command -v jq &>/dev/null; then
+    echo '{"teammateMode":"auto","autoConnectIde":true}' > "$HOME/.claude.json"
+    echo "Created ~/.claude.json with teammateMode=auto, autoConnectIde=true"
+else
+    echo "Warning: jq not installed — set teammateMode/autoConnectIde manually in ~/.claude.json"
+fi
 
 echo ""
 echo "=== iTerm2 ==="
