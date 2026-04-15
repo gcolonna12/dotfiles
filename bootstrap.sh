@@ -28,7 +28,7 @@ if [ "$OS" = "Darwin" ]; then
     if [ "$TIER" = "full" ]; then
         echo "=== Full ==="
         brew install node eza bat fd ripgrep zoxide starship tlrc tree
-        brew install --cask iterm2 claude-code raycast stats
+        brew install --cask iterm2 claude-code raycast stats betterdisplay
         # Clear Gatekeeper quarantine on claude — macOS blocks unsigned/unnotarized CLIs
         xattr -d com.apple.quarantine "$(command -v claude)" 2>/dev/null || true
 

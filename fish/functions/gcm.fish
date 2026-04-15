@@ -12,6 +12,7 @@ git diff --cached
 Please generate a concise, one-line commit message for these changes."
     end
 
+    git add -A
     echo "Generating AI-powered commit message..."
     set -l commit_message (_gcm_generate)
 
