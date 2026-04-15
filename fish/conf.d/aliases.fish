@@ -41,7 +41,7 @@ alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # === Dev Tools ===
 # Print PATH one entry per line — makes it readable when debugging PATH issues
-alias path='echo $PATH | tr ":" "\n"'
+alias showpath='string join \n $PATH'
 # Reload shell config without opening a new terminal
 alias reload="exec fish"
 # Pipe-friendly map: `find . -name '*.py' | map dirname | sort -u`

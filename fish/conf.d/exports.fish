@@ -1,6 +1,12 @@
 # Default editor for git commits, crontab, etc.
 set -gx EDITOR vim
 
+# Push VS Code IPC into tmux so `code` CLI and Claude Code autoConnectIde work from tmux panes
+if set -q TMUX; and set -q VSCODE_IPC_HOOK_CLI
+    tmux setenv VSCODE_IPC_HOOK_CLI "$VSCODE_IPC_HOOK_CLI"
+    tmux setenv VSCODE_GIT_IPC_HANDLE "$VSCODE_GIT_IPC_HANDLE"
+end
+
 # Prevents Python from choking on non-ASCII characters in pipes and redirects
 set -gx PYTHONIOENCODING UTF-8
 

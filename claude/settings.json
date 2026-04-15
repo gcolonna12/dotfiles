@@ -3,13 +3,29 @@
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
-      "WebFetch"
+      "WebFetch",
+      "Bash(curl *)"
     ]
   },
   "model": "opus",
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/gh-api-readonly-guard.sh"
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "idle_prompt",
@@ -43,14 +59,12 @@
     "commit-commands@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
-    "claude-code-setup@claude-plugins-official": true
+    "claude-code-setup@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true
   },
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
-  "showThinkingSummaries": true,
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "voiceEnabled": false
+  "voiceEnabled": false,
+  "showThinkingSummaries": true,
+  "skipDangerousModePermissionPrompt": true
 }

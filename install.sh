@@ -112,6 +112,7 @@ mkdir -p "$HOME/.claude"
 link "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 link "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 link "$DOTFILES_DIR/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+link "$DOTFILES_DIR/claude/gh-api-readonly-guard.sh" "$HOME/.claude/gh-api-readonly-guard.sh"
 # These settings must live in ~/.claude.json (runtime config, not symlinkable).
 # Merge them in without clobbering existing keys.
 if command -v jq &>/dev/null && [ -f "$HOME/.claude.json" ]; then
