@@ -18,3 +18,15 @@ Before making changes, prefer a focused approach: ask clarifying questions if th
 # Bash Commands
 - Never use `python3 -c` or `python -c` with multiline inline code. Write a temp `.py` file and execute it instead.
 - Avoid `#` characters inside quoted Bash arguments (triggers a security heuristic that cannot be allowlisted).
+
+## Code Navigation
+LSP servers are available for Python (.py, .pyi) and TypeScript/JavaScript (.ts, .tsx, .js, .jsx).
+
+For these file types, always prefer LSP over Grep/Glob/Read for code navigation:
+- Finding symbol definitions → LSP goToDefinition
+- Finding usages → LSP findReferences
+- Listing symbols in a file → LSP documentSymbol
+- Type information → LSP hover
+- Errors and warnings → LSP diagnostics
+
+For all other file types, use Grep/Glob/Read as normal.
