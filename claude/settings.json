@@ -63,7 +63,6 @@
     "claude-code-setup@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "roads-ai-tools-devs@roads-ai-marketplace": true
   },
   "alwaysThinkingEnabled": false,
   "effortLevel": "xhigh",
