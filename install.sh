@@ -51,6 +51,11 @@ done
 for f in "$DOTFILES_DIR"/fish/functions/*.fish; do
     link "$f" "$HOME/.config/fish/functions/$(basename "$f")"
 done
+mkdir -p "$HOME/.config/fish/completions"
+for f in "$DOTFILES_DIR"/fish/completions/*.fish; do
+    [ -e "$f" ] || continue
+    link "$f" "$HOME/.config/fish/completions/$(basename "$f")"
+done
 copy_template "$DOTFILES_DIR/fish/conf.d/extra.fish.example" "$HOME/.config/fish/conf.d/extra.fish"
 
 echo ""
