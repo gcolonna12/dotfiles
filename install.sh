@@ -140,6 +140,10 @@ if [ "$(uname -s)" = "Darwin" ]; then
 fi
 
 echo ""
+echo "=== Lazygit ==="
+link "$DOTFILES_DIR/lazygit/config.yml" "$HOME/.config/lazygit/config.yml"
+
+echo ""
 echo "=== Hushlogin ==="
 link "$DOTFILES_DIR/hushlogin/.hushlogin" "$HOME/.hushlogin"
 
