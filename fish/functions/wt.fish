@@ -30,6 +30,51 @@ function wt --description 'git worktree helpers'
             end
             git worktree remove $argv
 
+        case clean
+            set -l force 0
+            if contains -- --force $argv
+                set force 1
+            end
+            if not command -q gh
+                echo "wt clean: requires 'gh' (GitHub CLI)"
+                return 1
+            end
+            set -l repo_root (git rev-parse --show-toplevel)
+            or return 1
+            set -l to_remove
+            # Pair each worktree path with its branch using awk (porcelain output has blank-line-separated blocks)
+            set -l pairs (git worktree list --porcelain | awk '
+                /^worktree / { path = substr($0, 10) }
+                /^branch refs\/heads\// { sub(/^branch refs\/heads\//, "", $0); print path "\t" $0 }
+            ')
+            for pair in $pairs
+                set -l parts (string split \t -- $pair)
+                set -l path $parts[1]
+                set -l branch $parts[2]
+                test "$path" = "$repo_root"; and continue
+                set -l state (gh pr list --head $branch --state all --json state --jq '.[0].state' 2>/dev/null)
+                if test "$state" = MERGED -o "$state" = CLOSED
+                    set to_remove $to_remove "$path"\t"$branch"\t"$state"
+                end
+            end
+            if test (count $to_remove) -eq 0
+                echo "wt clean: no merged or closed worktrees found"
+                return 0
+            end
+            if test $force -eq 0
+                echo "wt clean: dry run (pass --force to remove)"
+                for entry in $to_remove
+                    echo "  would remove: "(string split \t -- $entry)[1]" ("(string split \t -- $entry)[2]", "(string split \t -- $entry)[3]")"
+                end
+                return 0
+            end
+            for entry in $to_remove
+                set -l parts (string split \t -- $entry)
+                echo "removing: $parts[1] ($parts[2], $parts[3])"
+                git worktree remove $parts[1]
+                and git branch -D $parts[2] 2>/dev/null
+            end
+
         case cd
             set -l target (git worktree list --porcelain | grep '^worktree ' | awk '{print $2}' | fzf)
             test -n "$target"
@@ -42,6 +87,7 @@ function wt --description 'git worktree helpers'
             echo "  add <branch>   create worktree at <repo>.worktrees/<branch>/ and cd into it"
             echo "  list           list all worktrees for the current repo"
             echo "  remove <path>  remove a worktree"
+            echo "  clean [--force]  remove worktrees whose PR is merged or closed (dry-run by default)"
             echo "  cd             fuzzy-pick a worktree and cd into it (requires fzf)"
 
         case '*'
