@@ -68,5 +68,7 @@
   "effortLevel": "xhigh",
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
-  "voiceEnabled": false
+  "voiceEnabled": false,
+  "theme": "light",
+  "teammateMode": "auto"
 }

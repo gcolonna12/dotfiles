@@ -10,3 +10,7 @@ complete -c wt -n '__fish_use_subcommand' -a 'help'   -d 'Show usage'
 complete -c wt -n '__fish_use_subcommand' -a 'a'
 complete -c wt -n '__fish_use_subcommand' -a 'ls'
 complete -c wt -n '__fish_use_subcommand' -a 'rm'
+
+# Branch completion for `wt add` / `wt a` (second token only).
+complete -c wt -n '__fish_seen_subcommand_from add a' \
+    -a '(git for-each-ref --format="%(refname:short)" refs/heads/ 2>/dev/null)'
