@@ -175,3 +175,6 @@
 
 	# New repos default to main — the modern standard
 	defaultBranch = main
+[user]
+	name = gcolonna
+	email = gcolonna@expediagroup.com
