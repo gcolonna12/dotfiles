@@ -9,10 +9,7 @@
     "pr": ""
   },
   "permissions": {
-    "allow": [
-      "WebFetch",
-      "Bash(curl *)"
-    ]
+    "allow": []
   },
   "model": "opus",
   "hooks": {
@@ -46,6 +43,29 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "codegraph mark-dirty",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "codegraph sync-if-dirty"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -62,13 +82,22 @@
     "claude-md-management@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": true,
+    "llm-wiki@llm-wiki": true
+  },
+  "extraKnownMarketplaces": {
+    "llm-wiki": {
+      "source": {
+        "source": "github",
+        "repo": "praneybehl/llm-wiki-plugin"
+      }
+    }
   },
   "alwaysThinkingEnabled": false,
   "effortLevel": "xhigh",
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
-  "voiceEnabled": false,
   "theme": "light",
-  "teammateMode": "auto"
+  "teammateMode": "auto",
+  "voiceEnabled": false
 }

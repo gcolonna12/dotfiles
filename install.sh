@@ -115,9 +115,29 @@ echo ""
 echo "=== Claude Code ==="
 mkdir -p "$HOME/.claude"
 link "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
-link "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 link "$DOTFILES_DIR/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 link "$DOTFILES_DIR/claude/gh-api-readonly-guard.sh" "$HOME/.claude/gh-api-readonly-guard.sh"
+
+# settings.json is compiled (not symlinked): base from repo, deep-merged with
+# ~/.claude/settings.local.json (machine-specific, e.g. Bedrock/AWS env vars).
+# Claude Code has no native settings.local.json at the user scope, so we merge
+# at install time. Re-run install.sh after editing either file.
+copy_template "$DOTFILES_DIR/claude/settings.local.json.example" "$HOME/.claude/settings.local.json"
+if command -v jq &>/dev/null; then
+    if [ -f "$HOME/.claude/settings.json" ] && [ ! -L "$HOME/.claude/settings.json" ]; then
+        cp "$HOME/.claude/settings.json" "$HOME/.claude/settings.json.backup"
+        echo "Backed up existing $HOME/.claude/settings.json to settings.json.backup"
+    fi
+    jq -s '.[0] * .[1]' \
+        "$DOTFILES_DIR/claude/settings.json" \
+        "$HOME/.claude/settings.local.json" \
+        > "$HOME/.claude/settings.json.tmp" \
+        && mv "$HOME/.claude/settings.json.tmp" "$HOME/.claude/settings.json"
+    echo "Compiled $HOME/.claude/settings.json (base + local overlay)"
+else
+    echo "Warning: jq not installed — copying base settings.json without local overlay"
+    cp "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+fi
 # These settings must live in ~/.claude.json (runtime config, not symlinkable).
 # Merge them in without clobbering existing keys.
 if command -v jq &>/dev/null && [ -f "$HOME/.claude.json" ]; then
