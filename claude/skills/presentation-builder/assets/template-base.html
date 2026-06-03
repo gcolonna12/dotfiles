@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{TITLE}}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  /* ==========================================================================
+     FIXED-CANVAS LAYOUT
+
+     Each slide is a fixed CANVAS_W × CANVAS_H px box (pick from the table
+     below for your aspect ratio). All sizes inside slides are in px / rem / em
+     — never vh/vw/% of viewport. On screen, JS scales the slide canvas to fit
+     the viewport (preserving aspect ratio). In print, no scaling — each slide
+     renders at its native pixel size and lands on its own page.
+
+     Canvas presets (96 DPI):
+       A4 landscape:    1123 × 794   (default)
+       16:9 widescreen: 1920 × 1080
+       4:3:             1024 × 768
+
+     What you see in the browser is what you get in the PDF.
+     ========================================================================== */
+
+  :root {
+    /* === STYLE VARIABLES (override per preset; see assets/styles.md) === */
+    --bg: #faf8f4;
+    --ink: #1a1a1a;
+    --muted: #5a5a5a;
+    --accent: #b8860b;
+    --rule: #d8d4ca;
+    --code-bg: #f0ece2;
+    --note-bg: #fff7e0;
+    --frame-bg: #2a2a2a;
+
+    --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+    /* === CANVAS DIMENSIONS — change per format === */
+    --slide-w: 1123px;   /* A4 landscape default */
+    --slide-h: 794px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--frame-bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.4;
+    overflow: hidden;
+  }
+
+  /* The fixed-size canvas. Centered and scaled by JS via --scale CSS variable. */
+  .deck {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: var(--slide-w);
+    height: var(--slide-h);
+    transform: translate(-50%, -50%) scale(var(--scale, 1));
+    transform-origin: center center;
+    background: var(--bg);
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: var(--slide-w);
+    height: var(--slide-h);
+    padding: 56px 80px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    font-size: 20px;
+  }
+  .slide.active { display: flex; }
+
+  .slide h1 {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 20px;
+    letter-spacing: -0.02em;
+  }
+  .slide h2 {
+    font-size: 38px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 18px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .slide h3 {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+
+  .slide ul { list-style: none; padding: 0; margin: 0; }
+  .slide li {
+    margin: 10px 0;
+    padding-left: 24px;
+    position: relative;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+  .slide li::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .slide li ul { margin-top: 6px; }
+  .slide li ul li {
+    font-size: 16px;
+    color: var(--muted);
+    margin: 4px 0;
+  }
+  .slide li ul li::before { content: "·"; }
+
+  .slide em { font-style: italic; }
+  .slide strong { color: var(--ink); font-weight: 700; }
+  .slide code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--code-bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .slide a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .slide img, .slide svg, .slide object {
+    max-width: 100%;
+    max-height: 380px;
+    width: auto;
+    object-fit: contain;
+    margin: 16px auto 0;
+    display: block;
+  }
+
+  /* === Quote block: for citations, receipts, third-party endorsements === */
+  .quote {
+    border-left: 3px solid var(--accent);
+    padding: 6px 16px;
+    margin: 10px 0 4px 24px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* === Side-by-side: text left, image right === */
+  .slide.split { flex-direction: row; align-items: center; gap: 56px; }
+  .slide.split .text { flex: 1 1 55%; min-width: 0; }
+  .slide.split .visual {
+    flex: 1 1 45%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide.split .visual img,
+  .slide.split .visual svg,
+  .slide.split .visual object {
+    max-width: 100%;
+    max-height: 600px;
+    margin: 0;
+  }
+
+  /* === Overlay: text in normal column, image absolute on the right === */
+  .slide.overlay-right { position: relative; }
+  .slide.overlay-right h2,
+  .slide.overlay-right h3,
+  .slide.overlay-right ul { max-width: 600px; }
+  .slide.overlay-right .overlay-image {
+    position: absolute;
+    top: 50%;
+    right: 80px;
+    transform: translateY(-50%);
+    max-width: 420px;
+    max-height: 500px;
+    width: auto;
+    margin: 0;
+  }
+
+  /* === Title slide: cover, centered, big === */
+  .slide.title-slide { justify-content: center; align-items: center; text-align: center; }
+  .slide.title-slide h1 { font-size: 80px; }
+  .slide.title-slide .subtitle {
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 12px;
+  }
+  .slide.title-slide .byline {
+    margin-top: 90px;
+    color: var(--muted);
+    font-size: 18px;
+  }
+
+  /* === Demo / single-word slide: huge type, centered === */
+  .slide.demo-slide { justify-content: center; align-items: center; text-align: center; }
+  .slide.demo-slide h1 {
+    font-size: 200px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  /* === Image-only slide: full-bleed === */
+  .slide.image-only { padding: 0; justify-content: center; align-items: center; }
+  .slide.image-only img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    margin: 0;
+  }
+
+  /* === Chrome (slide number, help, notes) sits on top of the deck === */
+  .slide-number {
+    position: fixed;
+    bottom: 12px; right: 18px;
+    font-size: 13px;
+    color: #ccc;
+    font-variant-numeric: tabular-nums;
+    z-index: 10;
+  }
+  .help-pill {
+    position: fixed;
+    bottom: 12px; left: 18px;
+    font-size: 11px;
+    color: #ccc;
+    z-index: 10;
+  }
+  .help-pill kbd {
+    background: var(--code-bg);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--ink);
+  }
+  .speaker-notes {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--note-bg);
+    border-top: 2px solid var(--accent);
+    padding: 12px 32px 16px;
+    max-height: 30vh;
+    overflow-y: auto;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ink);
+    display: none;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.08);
+    z-index: 11;
+  }
+  .speaker-notes.visible { display: block; }
+  .speaker-notes::before {
+    content: "speaker note";
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 10px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  /* === PRINT: each fixed-size slide becomes one page.
+     No scaling, no overrides — content is already px-sized to fit. === */
+  @media print {
+    @page { size: var(--slide-w) var(--slide-h); margin: 0; }
+    html, body { background: white; overflow: visible; height: auto; }
+    .deck {
+      position: static;
+      transform: none;
+      width: var(--slide-w);
+      height: auto;
+      background: white;
+    }
+    .slide {
+      display: flex !important;
+      position: relative;
+      inset: auto;
+      page-break-after: always;
+      page-break-inside: avoid;
+      break-after: page;
+      break-inside: avoid;
+    }
+    .slide:last-of-type { page-break-after: auto; break-after: auto; }
+    .slide-number, .help-pill, .speaker-notes { display: none !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.2s !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ============================================================
+       SLIDES GO HERE. One <section class="slide"> per slide.
+       The first slide should have class="active" so it shows on load.
+       ============================================================ -->
+
+  {{SLIDES}}
+
+</div><!-- /.deck -->
+
+<div class="slide-number"><span id="cur">1</span> / <span id="total">{{COUNT}}</span></div>
+<div class="help-pill">
+  <kbd>←</kbd> <kbd>→</kbd> navigate · <kbd>n</kbd> notes · <kbd>f</kbd> fullscreen · <kbd>?</kbd> help
+</div>
+<div class="speaker-notes" id="notes"></div>
+
+<script>
+  /* Scale the fixed-canvas deck to fit the viewport while preserving aspect
+     ratio. Re-runs on resize. The scale factor is exposed as the --scale
+     custom property so the CSS transform picks it up. */
+  const deck = document.getElementById('deck');
+  const styles = getComputedStyle(document.documentElement);
+  const SLIDE_W = parseInt(styles.getPropertyValue('--slide-w'));
+  const SLIDE_H = parseInt(styles.getPropertyValue('--slide-h'));
+  function fitDeck() {
+    const pad = 24;
+    const sx = (window.innerWidth  - pad * 2) / SLIDE_W;
+    const sy = (window.innerHeight - pad * 2) / SLIDE_H;
+    deck.style.setProperty('--scale', Math.min(sx, sy).toFixed(4));
+  }
+  fitDeck();
+  window.addEventListener('resize', fitDeck);
+
+  /* Slide navigation */
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const cur = document.getElementById('cur');
+  const total = document.getElementById('total');
+  const notesEl = document.getElementById('notes');
+  total.textContent = slides.length;
+
+  let i = 0;
+  function show(n) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    slides[i].classList.remove('active');
+    slides[n].classList.add('active');
+    i = n;
+    cur.textContent = n + 1;
+    notesEl.textContent = slides[n].dataset.notes || '';
+    location.hash = '#' + (n + 1);
+  }
+
+  /* Boot from #N hash if present */
+  const hashIdx = parseInt(location.hash.replace('#', ''), 10);
+  if (!isNaN(hashIdx) && hashIdx >= 1 && hashIdx <= slides.length) {
+    show(hashIdx - 1);
+  } else {
+    notesEl.textContent = slides[0].dataset.notes || '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    switch (e.key) {
+      case 'ArrowRight': case ' ': case 'PageDown':
+        show(i + 1); e.preventDefault(); break;
+      case 'ArrowLeft': case 'PageUp':
+        show(i - 1); e.preventDefault(); break;
+      case 'Home': show(0); break;
+      case 'End': show(slides.length - 1); break;
+      case 'n': case 'N': notesEl.classList.toggle('visible'); break;
+      case 'f': case 'F':
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen();
+        break;
+      case '?':
+        alert('Keys:\n  ← → / Space — navigate\n  Home / End — first / last\n  n — toggle speaker notes\n  f — fullscreen\n  ? — this help');
+        break;
+    }
+  });
+
+  /* Click left half = back, right half = forward */
+  document.body.addEventListener('click', (e) => {
+    if (e.target.closest('.speaker-notes, a, .help-pill')) return;
+    const nextHalf = e.clientX > window.innerWidth / 2;
+    show(i + (nextHalf ? 1 : -1));
+  });
+</script>
+</body>
+</html>

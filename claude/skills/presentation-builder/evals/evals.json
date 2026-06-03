@@ -1,0 +1,26 @@
+{
+  "skill_name": "presentation-builder",
+  "evals": [
+    {
+      "id": 1,
+      "name": "outline-to-deck",
+      "prompt": "I have this markdown outline for a short talk I'm giving next week. Turn it into an HTML presentation I can present from a browser, A4 landscape format, clean minimal style. Keep my wording verbatim — don't paraphrase.\n\n```\n## Slide 1 — Title\n- Boring tools win\n- Why your AI orchestrator is just tmux underneath\n- Daisy Lee · DevConf · 2026\n\n## Slide 2 — A confession\n- Last week I was juggling four agents and lost track of which one was on which branch\n- I had 12 terminal windows open, all called \"Terminal\"\n- This talk is about lifting that limit\n\n> *Speaker note:* tell it as a story, not a complaint. Pause after \"lifting that limit\".\n\n## Slide 3 — What people think tmux is\n- Splits, tabs, hotkeys\n- \"I have iTerm2, why bother?\"\n- This is a misunderstanding — and it's the reason most people never adopt it\n\n## Slide 4 — What tmux actually is\n- A tiny operating system for terminal processes\n- Sessions live in a server; your terminal is just a window onto them\n- Decoupling sessions from the emulator is the whole game\n\n![[architecture.png]]\n\n## Slide 5 — The combo\n- One repo. Many worktrees. Many tmux sessions.\n- Detach, walk away, the work continues\n\n## Slide 6 — What I recommend\n- Spend an afternoon\n- Six tmux commands, three worktree commands\n- Try it tomorrow on real work\n```",
+      "expected_output": "A single self-contained HTML file using the fixed-canvas pattern (--slide-w / --slide-h CSS variables), with 6 sections of class='slide', preserving the user's bullet wording verbatim, with the speaker note in a data-notes attribute on slide 2, and a reference to architecture.png on slide 4.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "topic-only-brief",
+      "prompt": "I'm giving a 10-minute lightning talk at the data team's offsite next month about why our team should adopt feature flags. Could you build me a presentation? About 8 slides feels right. The audience is mid-level data engineers — they know the basics but probably haven't used flags day-to-day. I want it to feel polished but not corporate. Conference talk vibe.",
+      "expected_output": "Either: (a) the skill asks Phase 1 capture-intent questions before generating (preferred), OR (b) generates a complete 8-slide HTML deck on the topic with a clear narrative arc, fixed-canvas layout, and conference-appropriate styling.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "enhance-existing-deck",
+      "prompt": "I have an existing HTML presentation at presentation.html. I need to add three new slides at the end about the rollout timeline:\n\n1. Phase 1 — internal beta (next 2 weeks)\n2. Phase 2 — limited GA (March)\n3. Phase 3 — full launch (April)\n\nMake them match the existing style — don't change the rest of the deck. Each slide should have one heading and 3-4 short bullets.",
+      "expected_output": "The skill reads the existing HTML, identifies its style/canvas/layout conventions, and appends three new <section class='slide'> blocks that match — same canvas dimensions, same color palette, same layout pattern. Does not modify slides that already exist.",
+      "files": ["presentation.html"]
+    }
+  ]
+}

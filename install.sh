@@ -118,6 +118,18 @@ link "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 link "$DOTFILES_DIR/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 link "$DOTFILES_DIR/claude/gh-api-readonly-guard.sh" "$HOME/.claude/gh-api-readonly-guard.sh"
 
+# Skills: link each skill folder under dotfiles/claude/skills/ into ~/.claude/skills/.
+# Per-skill symlinks (not the whole skills/ dir) so locally-installed skills can
+# coexist alongside dotfiles-managed ones.
+mkdir -p "$HOME/.claude/skills"
+if [ -d "$DOTFILES_DIR/claude/skills" ]; then
+    for skill_dir in "$DOTFILES_DIR"/claude/skills/*/; do
+        [ -d "$skill_dir" ] || continue
+        skill_name=$(basename "$skill_dir")
+        link "$DOTFILES_DIR/claude/skills/$skill_name" "$HOME/.claude/skills/$skill_name"
+    done
+fi
+
 # settings.json is compiled (not symlinked): base from repo, deep-merged with
 # ~/.claude/settings.local.json (machine-specific, e.g. Bedrock/AWS env vars).
 # Claude Code has no native settings.local.json at the user scope, so we merge
