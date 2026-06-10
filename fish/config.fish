@@ -1,5 +1,21 @@
+# macOS default PATH puts /opt/homebrew/bin AFTER /bin, so `env bash` finds the
+# stale system bash 3.2 instead of brew's bash 5. Prepend so brew tools win.
+if test -d /opt/homebrew/bin
+    fish_add_path --prepend /opt/homebrew/bin /opt/homebrew/sbin
+end
+
 # ~/bin is where we keep personal scripts that should be runnable from anywhere
 fish_add_path ~/bin
+
+# pnpm's global bin (where `pnpm add -g <pkg>` puts CLI shims). pnpm setup would
+# write this for us, but we manage shell config from dotfiles so add it here.
+# pnpm 9+ stores shims at $PNPM_HOME directly; older layouts used $PNPM_HOME/bin —
+# add both if present so the config is forward- and backward-compatible.
+if test -d ~/Library/pnpm
+    set -gx PNPM_HOME ~/Library/pnpm
+    fish_add_path $PNPM_HOME
+    test -d $PNPM_HOME/bin; and fish_add_path $PNPM_HOME/bin
+end
 
 # Fish auto-sources everything in conf.d/, so exports.fish and aliases.fish
 # placed there will load automatically — no explicit sourcing needed.

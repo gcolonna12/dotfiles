@@ -23,7 +23,8 @@ if [ "$OS" = "Darwin" ]; then
     brew update
 
     echo "=== Core ==="
-    brew install git git-lfs vim tmux fish wget coreutils findutils gnu-sed grep
+    # bash: macOS ships 3.2; some tooling (e.g. tmux-agent-indicator) needs 4+.
+    brew install git git-lfs vim tmux fish wget bash coreutils findutils gnu-sed grep
 
     if [ "$TIER" = "full" ]; then
         echo "=== Full ==="

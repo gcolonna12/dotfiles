@@ -107,6 +107,18 @@ echo ""
 echo "=== tmux ==="
 link "$DOTFILES_DIR/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
+# TPM (Tmux Plugin Manager) — required by the @plugin lines in .tmux.conf.
+# Clone if missing, then install/update plugins headlessly so a fresh machine
+# doesn't need `prefix + I` to bring up tmux-resurrect, tmux-agent-indicator, etc.
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [ ! -d "$TPM_DIR" ]; then
+    echo "Installing TPM..."
+    git clone --depth 1 https://github.com/tmux-plugins/tpm "$TPM_DIR"
+fi
+if command -v tmux &>/dev/null; then
+    "$TPM_DIR/bin/install_plugins" >/dev/null && echo "Installed tmux plugins"
+fi
+
 echo ""
 echo "=== EditorConfig ==="
 link "$DOTFILES_DIR/editorconfig/.editorconfig" "$HOME/.editorconfig"
