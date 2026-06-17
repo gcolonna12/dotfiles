@@ -1,15 +1,15 @@
-# AI-powered git commit: stages diff → LLM generates message → accept/edit/regenerate/cancel
-# Requires the `llm` CLI: https://llm.datasette.io/en/stable/
+# AI-powered git commit: stages diff → Claude generates message → accept/edit/regenerate/cancel
+# Requires the `claude` CLI (Claude Code): https://docs.claude.com/en/docs/claude-code
 function gcm
     function _gcm_generate
-        git diff --cached | llm "
+        git diff --cached | claude -p "
 Below is a diff of all staged changes, coming from the command:
 
 \`\`\`
 git diff --cached
 \`\`\`
 
-Please generate a concise, one-line commit message for these changes."
+Please generate a concise, one-line commit message for these changes. Output only the commit message, no other text. Do not include any attribution, signature, co-author trailer, or comment such as 'committed with Claude Code'."
     end
 
     git add -A

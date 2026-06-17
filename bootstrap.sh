@@ -24,17 +24,17 @@ if [ "$OS" = "Darwin" ]; then
 
     echo "=== Core ==="
     # bash: macOS ships 3.2; some tooling (e.g. tmux-agent-indicator) needs 4+.
-    brew install git git-lfs vim tmux fish wget bash coreutils findutils gnu-sed grep
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install git git-lfs vim tmux fish wget bash coreutils findutils gnu-sed grep
 
     if [ "$TIER" = "full" ]; then
         echo "=== Full ==="
-        brew install node eza bat fd ripgrep fzf zoxide starship tlrc tree
-        brew install --cask iterm2 claude-code raycast stats betterdisplay
+        HOMEBREW_NO_AUTO_UPDATE=1 brew install node eza bat fd ripgrep fzf zoxide starship tlrc tree
+        HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask iterm2 claude-code raycast stats betterdisplay
         # Clear Gatekeeper quarantine on claude — macOS blocks unsigned/unnotarized CLIs
         xattr -d com.apple.quarantine "$(command -v claude)" 2>/dev/null || true
 
         echo "=== Language servers (Claude Code intelligence) ==="
-        npm install -g pyright typescript-language-server typescript
+        npm install -g pyright typescript-language-server typescript @colbymchenry/codegraph
     fi
 
     # Set fish as default shell
@@ -109,7 +109,7 @@ elif [ "$OS" = "Linux" ]; then
         fi
 
         echo "=== Language servers (Claude Code intelligence) ==="
-        npm install -g pyright typescript-language-server typescript
+        npm install -g pyright typescript-language-server typescript @colbymchenry/codegraph
     fi
 
     # Set fish as default shell.

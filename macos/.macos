@@ -63,6 +63,9 @@ defaults write com.apple.screencapture disable-shadow -bool true
 # Hidden extensions mean you can't tell .sh from .sh.txt — dangerous
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
+# Show hidden files (dotfiles, ~/Library, etc.) — devs need to see them
+defaults write com.apple.finder AppleShowAllFiles -bool true
+
 # Status bar shows item count and free space — useful at a glance
 defaults write com.apple.finder ShowStatusBar -bool true
 

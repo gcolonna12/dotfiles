@@ -9,7 +9,17 @@
     "pr": ""
   },
   "permissions": {
-    "allow": []
+    "allow": [
+      "mcp__codegraph__codegraph_explore",
+      "mcp__codegraph__codegraph_search",
+      "mcp__codegraph__codegraph_node",
+      "mcp__codegraph__codegraph_callers",
+      "mcp__codegraph__codegraph_callees",
+      "mcp__codegraph__codegraph_impact",
+      "mcp__codegraph__codegraph_files",
+      "mcp__codegraph__codegraph_status"
+    ],
+    "defaultMode": "auto"
   },
   "model": "opus",
   "preferredNotifChannel": "notifications_disabled",
@@ -41,18 +51,6 @@
           {
             "type": "command",
             "command": "w=$([ -n \"$TMUX\" ] && tmux display-message -p '#W'); osascript -e \"display notification \\\"Permission needed${w:+ in [$w]}\\\" with title \\\"Claude Code\\\"\""
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "codegraph mark-dirty",
-            "async": true
           }
         ]
       }
@@ -90,15 +88,6 @@
     ],
     "Stop": [
       {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "codegraph sync-if-dirty"
-          }
-        ]
-      },
-      {
         "hooks": [
           {
             "type": "command",
@@ -134,10 +123,11 @@
     }
   },
   "alwaysThinkingEnabled": false,
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
   "theme": "light",
   "teammateMode": "auto",
+  "skipAutoPermissionPrompt": true,
   "voiceEnabled": false
 }
