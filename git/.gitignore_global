@@ -23,3 +23,6 @@ Thumbs.db
 *~
 
 **/.claude/settings.local.json
+
+# Git worktrees created by the `wt` helper, kept inside the repo
+.worktrees/

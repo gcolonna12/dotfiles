@@ -1,5 +1,4 @@
-# Git worktree helpers: create/list/remove/jump with `<repo>.worktrees/<branch>/` layout.
-# Matches the default layout of the VS Code extension `jackiotyu.git-worktree-manager`.
+# Git worktree helpers: create/list/remove/jump with `<repo>/.worktrees/<branch>/` layout.
 function wt --description 'git worktree helpers'
     set -l cmd $argv[1]
     set -e argv[1]
@@ -14,9 +13,7 @@ function wt --description 'git worktree helpers'
             set -e argv[1]
             set -l repo_root (git rev-parse --show-toplevel)
             or return 1
-            set -l repo_name (basename $repo_root)
-            set -l parent (dirname $repo_root)
-            set -l target "$parent/$repo_name.worktrees/$branch"
+            set -l target "$repo_root/.worktrees/$branch"
             git worktree add $target $branch $argv
             and cd $target
 
@@ -84,7 +81,7 @@ function wt --description 'git worktree helpers'
             echo "usage: wt <command>"
             echo ""
             echo "commands:"
-            echo "  add <branch>   create worktree at <repo>.worktrees/<branch>/ and cd into it"
+            echo "  add <branch>   create worktree at <repo>/.worktrees/<branch>/ and cd into it"
             echo "  list           list all worktrees for the current repo"
             echo "  remove <path>  remove a worktree"
             echo "  clean [--force]  remove worktrees whose PR is merged or closed (dry-run by default)"
