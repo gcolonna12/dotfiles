@@ -45,3 +45,9 @@ end
 if command -q starship
     starship init fish | source
 end
+
+# direnv auto-loads/unloads per-directory .envrc files (and .env files they
+# source) as you cd in and out of project directories
+if command -q direnv
+    direnv hook fish | source
+end
