@@ -116,7 +116,12 @@ if [ ! -d "$TPM_DIR" ]; then
     git clone --depth 1 https://github.com/tmux-plugins/tpm "$TPM_DIR"
 fi
 if command -v tmux &>/dev/null; then
+    # install_plugins needs a running server with the config loaded, otherwise
+    # TMUX_PLUGIN_MANAGER_PATH is unset and it aborts. Use a throwaway session.
+    tmux new-session -d -s _tpm_install
+    tmux source-file "$HOME/.tmux.conf"
     "$TPM_DIR/bin/install_plugins" >/dev/null && echo "Installed tmux plugins"
+    tmux kill-session -t _tpm_install
 fi
 
 echo ""
