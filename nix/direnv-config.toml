@@ -1,0 +1,6 @@
+# direnv global config. Symlinked to ~/.config/direnv/config.toml by install.sh.
+[global]
+# Don't warn when a slow flake eval exceeds the default timeout.
+warn_timeout = 0
+# Don't dump the env-var diff on every cd into/out of a project.
+hide_env_diff = true

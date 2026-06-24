@@ -1,0 +1,21 @@
+# Sources nix-direnv so `use flake` in a project .envrc gets a cached, fast
+# dev shell instead of re-evaluating the flake on every `cd`. Assumes
+# nix-direnv was installed via `nix profile add nixpkgs#nix-direnv`.
+source $HOME/.nix-profile/share/nix-direnv/direnvrc
+
+# Store direnv's layout cache in a global location instead of a local .direnv/
+# dir in each repo. nix-direnv's .direnv symlinks the entire Nix store; keeping
+# it inside the repo makes IDEs/file watchers (VS Code, watchman) try to watch
+# hundreds of thousands of files and run out of resources — which is why the
+# VS Code direnv plugin misbehaves with a local cache. See:
+# https://github.com/direnv/direnv/wiki/Customizing-cache-location
+: "${XDG_CACHE_HOME:="${HOME}/.cache"}"
+declare -A direnv_layout_dirs
+direnv_layout_dir() {
+    local hash path
+    echo "${direnv_layout_dirs[$PWD]:=$(
+        hash="$(sha1sum - <<< "$PWD" | head -c40)"
+        path="${PWD//[^a-zA-Z0-9]/-}"
+        echo "${XDG_CACHE_HOME}/direnv/layouts/${hash}${path}"
+    )}"
+}

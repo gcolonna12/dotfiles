@@ -189,6 +189,16 @@ if [ "$(uname -s)" = "Darwin" ]; then
 fi
 
 echo ""
+echo "=== VS Code ==="
+if [ "$(uname -s)" = "Darwin" ]; then
+    link "$DOTFILES_DIR/vscode/settings.json" \
+        "$HOME/Library/Application Support/Code/User/settings.json"
+else
+    link "$DOTFILES_DIR/vscode/settings.json" \
+        "$HOME/.config/Code/User/settings.json"
+fi
+
+echo ""
 echo "=== Hushlogin ==="
 link "$DOTFILES_DIR/hushlogin/.hushlogin" "$HOME/.hushlogin"
 
@@ -208,6 +218,19 @@ if [ -d "$DOTFILES_DIR/bin" ] && [ "$(ls -A "$DOTFILES_DIR/bin")" ]; then
     for f in "$DOTFILES_DIR"/bin/*; do
         link "$f" "$HOME/bin/$(basename "$f")"
     done
+fi
+
+echo ""
+echo "=== Nix (Generative-specific) ==="
+# Company config — only relevant on machines with Nix. The actual netrc (with the
+# GitLab token) and /etc/nix/nix.conf are set up by hand per the internal docs;
+# we only symlink the secret-free user configs. See nix/README.md.
+if command -v nix &>/dev/null; then
+    link "$DOTFILES_DIR/nix/direnvrc" "$HOME/.config/direnv/direnvrc"
+    link "$DOTFILES_DIR/nix/direnv-config.toml" "$HOME/.config/direnv/config.toml"
+    link "$DOTFILES_DIR/nix/user-nix.conf" "$HOME/.config/nix/nix.conf"
+else
+    echo "Nix not installed — skipping"
 fi
 
 echo ""
