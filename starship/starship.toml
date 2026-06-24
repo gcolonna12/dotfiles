@@ -1,4 +1,5 @@
 format = """
+${custom.direnv}\
 $username\
 $hostname\
 $directory\
@@ -30,6 +31,16 @@ style = "green"
 # Show the full path — no abbreviation or truncation
 truncate_to_repo = false
 truncation_length = 100
+
+# direnv loads the nix dev shell silently when a terminal opens already inside a
+# repo (VS Code), so there's no "direnv: loading" banner like `cd` gives in iTerm.
+# DIRENV_DIR is set whenever direnv has an env loaded — show a badge so the nix
+# shell is always visible regardless of how the terminal was started.
+[custom.direnv]
+description = "Show a nix badge when a direnv env is active"
+when = "test -n \"$DIRENV_DIR\""
+symbol = "❄️"
+format = "[$symbol](bold cyan)  "
 
 [git_branch]
 style = "bold purple"
