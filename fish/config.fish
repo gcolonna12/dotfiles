@@ -50,4 +50,12 @@ end
 # source) as you cd in and out of project directories
 if command -q direnv
     direnv hook fish | source
+    # The hook normally loads on the first fish_prompt event. VS Code's terminal
+    # shell integration wraps fish_prompt, which swallows that first trigger — so
+    # a new VS Code terminal opened inside an allowed repo wouldn't enter the
+    # nix/direnv env until you cd. Load eagerly at startup to cover that case.
+    # (Interactive shells only, so scripts/`fish -c` aren't slowed down.)
+    if status is-interactive
+        direnv export fish | source
+    end
 end

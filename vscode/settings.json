@@ -151,5 +151,11 @@
     ],
     "terminal.integrated.mouseWheelScrollSensitivity": 3,
     "terminal.integrated.gpuAcceleration": "off",
-    "workbench.secondarySideBar.defaultVisibility": "hidden"
+    "workbench.secondarySideBar.defaultVisibility": "hidden",
+
+    // direnv: pin absolute path (Dock-launched VS Code lacks shell PATH).
+    "direnv.path.executable": "/opt/homebrew/bin/direnv",
+    // Reload extension host on env change so language servers see flake tools.
+    "direnv.restart.automatic": true,
+    "terminal.integrated.initialHint": false
 }
