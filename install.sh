@@ -157,7 +157,15 @@ if command -v jq &>/dev/null; then
         cp "$HOME/.claude/settings.json" "$HOME/.claude/settings.json.backup"
         echo "Backed up existing $HOME/.claude/settings.json to settings.json.backup"
     fi
-    jq -s '.[0] * .[1]' \
+    # `*` deep-merges, but it REPLACES arrays — so a local overlay listing even
+    # one permission would wipe the base allow/deny/ask lists. Union + dedupe the
+    # permission arrays explicitly so local entries add to the base, not replace.
+    jq -s '
+        .[0] as $base | .[1] as $local
+        | reduce (["allow","deny","ask"][]) as $k ($base * $local;
+            (((($base.permissions[$k]) // []) + (($local.permissions[$k]) // [])) | unique) as $u
+            | if ($u | length) > 0 then .permissions[$k] = $u else . end)
+    ' \
         "$DOTFILES_DIR/claude/settings.json" \
         "$HOME/.claude/settings.local.json" \
         > "$HOME/.claude/settings.json.tmp" \
