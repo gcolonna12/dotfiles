@@ -5,18 +5,20 @@
 # so `claude` (and `plugin marketplace add`) won't load the official marketplace.
 #
 # Why individual plugin dirs and not the marketplace root: --plugin-dir loads a
-# dir as a *plugin* only if it contains .claude-plugin/plugin.json — a code path
-# the allowlist doesn't gate. The official marketplace root has only
-# marketplace.json, so --plugin-dir treats it as a *marketplace* and it's
+# dir as a *plugin* only if it contains .claude-plugin/plugin.json -- a code path
+# the allowlist does not gate. The official marketplace root has only
+# marketplace.json, so --plugin-dir treats it as a *marketplace* and it is
 # rejected. Individual plugin dirs each have their own plugin.json, so they load
-# directly from local files. (llm-wiki's root works because it IS a plugin.)
+# directly from local files. (llm-wiki root works because it IS a plugin.)
 #
 # Only plugins with local content can be loaded this way. Remote-reference
-# plugins (e.g. the *-lsp plugins) have no local files and are skipped.
+# plugins (e.g. the *-lsp plugins) ship content-less stubs upstream; pyright-lsp
+# is provided instead from local-plugins/ (dotfiles-managed, symlinked by
+# install.sh) with its lspServers block in plugin.json.
 #
 # `claude-plugins --update` git-pulls the llm-wiki checkout (the only source
-# that's a real clone). The official plugins are synced by Claude Code and can't
-# be pulled independently, so they stay pinned to what's on disk.
+# that is a real clone). The official plugins are synced by Claude Code and
+# cannot be pulled independently, so they stay pinned to what is on disk.
 function claude-plugins --description 'run claude with curated local plugins force-loaded'
     set -l official "$HOME/.claude/plugins/marketplaces/claude-plugins-official/plugins"
     set -l llm_wiki "$HOME/.claude/plugins/marketplaces/llm-wiki"
@@ -31,12 +33,13 @@ function claude-plugins --description 'run claude with curated local plugins for
         return
     end
 
-    # Curated selection — the plugins I actually want, not the whole marketplace.
+    # Curated selection -- the plugins I actually want, not the whole marketplace.
     set -l dirs \
         "$llm_wiki" \
         "$official/code-simplifier" \
         "$official/claude-md-management" \
-        "$official/claude-code-setup"
+        "$official/claude-code-setup" \
+        "$HOME/.claude/local-plugins/pyright-lsp"
 
     set -l flags
     for d in $dirs
