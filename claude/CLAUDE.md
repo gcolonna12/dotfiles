@@ -29,7 +29,7 @@
   delegate, and map the result — real logic (orchestration, scoring, I/O policy)
   lives in the domain/runtime layer they call, not in the adapter.
 - Do NOT hard-wrap Markdown prose at a fixed column. Use one sentence per line, or leave paragraphs unwrapped. Only wrap to a specific width if I explicitly ask.
-- When writing Markdown prose, follow Semantic Line Breaks (https://sembr.org/): break lines at sentence and clause boundaries.
+- When writing Markdown prose OR docstrings/block comments, follow Semantic Line Breaks (https://sembr.org/): break lines at sentence and clause boundaries, not at a fixed column.
 
 ## Engineering principles
 These are the values behind the rules above — apply them when a rule doesn't
