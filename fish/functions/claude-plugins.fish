@@ -39,7 +39,8 @@ function claude-plugins --description 'run claude with curated local plugins for
         "$official/code-simplifier" \
         "$official/claude-md-management" \
         "$official/claude-code-setup" \
-        "$HOME/.claude/local-plugins/pyright-lsp"
+        "$HOME/.claude/local-plugins/pyright-lsp" \
+        "$HOME/.claude/local-plugins/codegraph"
 
     set -l flags
     for d in $dirs
