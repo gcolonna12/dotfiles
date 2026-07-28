@@ -6,6 +6,10 @@
 # set -gx GITHUB_TOKEN "ghp_..."
 # set -gx UV_PUBLISH_PASSWORD "your-token"
 
+# pull-all — default GitLab group and subgroups to skip when cloning
+# set -gx PULL_ALL_GROUP "your-group"
+# set -gx PULL_ALL_SKIP "archive/*" "sandbox/*"
+
 # Claude Code — uncomment and fill in for Bedrock/AWS
 # set -gx CLAUDE_CODE_USE_BEDROCK 1
 # set -gx AWS_PROFILE your-profile
