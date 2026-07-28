@@ -61,6 +61,9 @@ copy_template "$DOTFILES_DIR/fish/conf.d/extra.fish.example" "$HOME/.config/fish
 echo ""
 echo "=== Zsh (fallback shell) ==="
 link "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+# Prezto config (module list) — Prezto itself is cloned by bootstrap.sh.
+# The symlink is harmless even if ~/.zprezto isn't present; .zshrc no-ops then.
+link "$DOTFILES_DIR/zsh/.zpreztorc" "$HOME/.zpreztorc"
 # Modular zsh configs go in ~/.zsh/
 mkdir -p "$HOME/.zsh"
 for f in exports aliases functions; do
@@ -147,6 +150,19 @@ if [ -d "$DOTFILES_DIR/claude/skills" ]; then
     done
 fi
 
+# Local plugins: link each plugin folder under dotfiles/claude/plugins/ into
+# ~/.claude/local-plugins/. These are loaded on demand via --plugin-dir (see the
+# `claude-plugins` fish function), not through the marketplace, so they work even
+# when the org marketplace allowlist blocks the official marketplace.
+mkdir -p "$HOME/.claude/local-plugins"
+if [ -d "$DOTFILES_DIR/claude/plugins" ]; then
+    for plugin_dir in "$DOTFILES_DIR"/claude/plugins/*/; do
+        [ -d "$plugin_dir" ] || continue
+        plugin_name=$(basename "$plugin_dir")
+        link "$DOTFILES_DIR/claude/plugins/$plugin_name" "$HOME/.claude/local-plugins/$plugin_name"
+    done
+fi
+
 # settings.json is compiled (not symlinked): base from repo, deep-merged with
 # ~/.claude/settings.local.json (machine-specific, e.g. Bedrock/AWS env vars).
 # Claude Code has no native settings.local.json at the user scope, so we merge
@@ -229,14 +245,14 @@ if [ -d "$DOTFILES_DIR/bin" ] && [ "$(ls -A "$DOTFILES_DIR/bin")" ]; then
 fi
 
 echo ""
-echo "=== Nix (Generative-specific) ==="
-# Company config — only relevant on machines with Nix. The actual netrc (with the
-# GitLab token) and /etc/nix/nix.conf are set up by hand per the internal docs;
-# we only symlink the secret-free user configs. See nix/README.md.
+echo "=== Nix (work-specific) ==="
+# Work config — only relevant on machines with Nix. The netrc (with the auth
+# token) and /etc/nix/nix.conf are set up by hand; nix.conf holds a private cache
+# so it's copied from a template and edited, not symlinked. See nix/README.md.
 if command -v nix &>/dev/null; then
     link "$DOTFILES_DIR/nix/direnvrc" "$HOME/.config/direnv/direnvrc"
     link "$DOTFILES_DIR/nix/direnv-config.toml" "$HOME/.config/direnv/config.toml"
-    link "$DOTFILES_DIR/nix/user-nix.conf" "$HOME/.config/nix/nix.conf"
+    copy_template "$DOTFILES_DIR/nix/user-nix.conf.example" "$HOME/.config/nix/nix.conf"
 else
     echo "Nix not installed — skipping"
 fi

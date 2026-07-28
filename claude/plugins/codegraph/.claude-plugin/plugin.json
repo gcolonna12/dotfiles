@@ -1,0 +1,8 @@
+{
+  "name": "codegraph",
+  "description": "Code intelligence over an indexed knowledge graph (local MCP server)",
+  "version": "1.0.0",
+  "author": {
+    "name": "local"
+  }
+}
