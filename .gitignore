@@ -8,6 +8,7 @@ git/.gitconfig.local
 .claude/settings.local.json
 claude/settings.local.json
 article.md
+nix/user-nix.conf
 
-# Nix netrc — contains the GitLab auth token. Set up by hand, never tracked.
+# Nix netrc — contains the auth token. Set up by hand, never tracked.
 nix/netrc

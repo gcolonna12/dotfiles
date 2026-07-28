@@ -1,0 +1,11 @@
+# User-level Nix config. Copied to ~/.config/nix/nix.conf by install.sh, then
+# edited by hand — it holds a private binary cache that's work-specific.
+#
+# No secrets here — netrc-file is only a PATH. The netrc itself (with the auth
+# token) lives at ~/.config/nix/netrc and /etc/nix/netrc and is NOT tracked.
+#
+# Fill in your private cachix cache name and its public key, and set the netrc
+# path to your home directory.
+substituters = https://cache.nixos.org https://<your-cache>.cachix.org
+trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= <your-cache>.cachix.org-1:<your-public-key>
+netrc-file = /Users/<you>/.config/nix/netrc
