@@ -30,8 +30,10 @@
         "source.organizeImports": "explicit"
     },
     "python.analysis.extraPaths": [
-        "src"
+        "src",
+        "python/src"
     ],
+    "python.defaultInterpreterPath": "${workspaceFolder}/python/.venv/bin/python",
     "github.copilot.nextEditSuggestions.enabled": true,
     "jupyter.askForKernelRestart": false,
     "jupyter.interactiveWindow.textEditor.executeSelection": true,
@@ -152,10 +154,15 @@
     "terminal.integrated.mouseWheelScrollSensitivity": 3,
     "terminal.integrated.gpuAcceleration": "off",
     "workbench.secondarySideBar.defaultVisibility": "hidden",
-
-    // direnv: pin absolute path (Dock-launched VS Code lacks shell PATH).
     "direnv.path.executable": "/opt/homebrew/bin/direnv",
-    // Reload extension host on env change so language servers see flake tools.
     "direnv.restart.automatic": true,
-    "terminal.integrated.initialHint": false
+    "terminal.integrated.initialHint": false,
+    "yaml.disableSchemaDetection": [
+        "**/.github/workflows/*.yml",
+        "**/.github/workflows/*.yaml",
+        "**/.gitea/workflows/*.yml",
+        "**/.gitea/workflows/*.yaml",
+        "**/.forgejo/workflows/*.yml",
+        "**/.forgejo/workflows/*.yaml"
+    ]
 }
