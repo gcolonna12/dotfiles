@@ -35,6 +35,17 @@ if [ "$OS" = "Darwin" ]; then
 
         echo "=== Language servers (Claude Code intelligence) ==="
         npm install -g pyright typescript-language-server typescript @colbymchenry/codegraph
+
+        echo "=== Prezto (zsh framework) ==="
+        # zsh is our fallback shell; Prezto adds syntax-highlighting,
+        # autosuggestions, history-substring-search, and a real completion
+        # system. Module list lives in zsh/.zpreztorc (symlinked by install.sh).
+        if [ ! -d "$HOME/.zprezto" ]; then
+            git clone --depth 1 --recursive https://github.com/sorin-ionescu/prezto.git "$HOME/.zprezto"
+            echo "  Cloned Prezto to ~/.zprezto"
+        else
+            echo "  ~/.zprezto already present — skipping"
+        fi
     fi
 
     # Set fish as default shell

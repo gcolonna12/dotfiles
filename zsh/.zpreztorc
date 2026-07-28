@@ -1,0 +1,27 @@
+#
+# Prezto configuration — controls which modules load and their behavior.
+# Symlinked to ~/.zpreztorc by install.sh; loaded by ~/.zshrc's Prezto init.
+#
+
+# Modules to load, in order. We deliberately omit the 'prompt' module:
+# starship is our prompt across both fish and zsh (see .zshrc).
+zstyle ':prezto:load' pmodule \
+  'environment' \
+  'terminal' \
+  'editor' \
+  'history' \
+  'directory' \
+  'spectrum' \
+  'utility' \
+  'completion' \
+  'syntax-highlighting' \
+  'history-substring-search' \
+  'autosuggestions'
+
+# Use vim-style line editing? No — default to emacs-style (Ctrl-A/E etc.),
+# which matches the bindings most CLI users expect.
+zstyle ':prezto:module:editor' key-bindings 'emacs'
+
+# history-substring-search: bind Up/Down to cycle matches of what's typed.
+zstyle ':prezto:module:history-substring-search:color' found 'bg=green,fg=white,bold'
+zstyle ':prezto:module:history-substring-search:color' not-found 'bg=red,fg=white,bold'
