@@ -30,8 +30,7 @@
         "source.organizeImports": "explicit"
     },
     "python.analysis.extraPaths": [
-        "src",
-        "python/src"
+        "src"
     ],
     "python.defaultInterpreterPath": "${workspaceFolder}/python/.venv/bin/python",
     "github.copilot.nextEditSuggestions.enabled": true,
@@ -155,6 +154,7 @@
     "terminal.integrated.gpuAcceleration": "off",
     "workbench.secondarySideBar.defaultVisibility": "hidden",
     "direnv.path.executable": "/opt/homebrew/bin/direnv",
+    // Reload extension host on env change so language servers see flake tools.
     "direnv.restart.automatic": true,
     "terminal.integrated.initialHint": false,
     "yaml.disableSchemaDetection": [
