@@ -1,8 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
-    "ENABLE_LSP_TOOL": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "ENABLE_LSP_TOOL": "1"
   },
   "attribution": {
     "commit": "",
@@ -10,43 +9,42 @@
   },
   "permissions": {
     "allow": [
-      "mcp__codegraph__codegraph_explore",
-      "mcp__codegraph__codegraph_search",
-      "mcp__codegraph__codegraph_node",
-      "mcp__codegraph__codegraph_callers",
-      "mcp__codegraph__codegraph_callees",
-      "mcp__codegraph__codegraph_impact",
-      "mcp__codegraph__codegraph_files",
-      "mcp__codegraph__codegraph_status",
       "Bash",
-      "WebFetch",
+      "Bash(glab mr diff:*)",
+      "Bash(glab mr view:*)",
       "Read",
+      "WebFetch",
       "WebSearch",
-      "mcp__linear-server__list_issues",
+      "mcp__codegraph__codegraph_callees",
+      "mcp__codegraph__codegraph_callers",
+      "mcp__codegraph__codegraph_explore",
+      "mcp__codegraph__codegraph_files",
+      "mcp__codegraph__codegraph_impact",
+      "mcp__codegraph__codegraph_node",
+      "mcp__codegraph__codegraph_search",
+      "mcp__codegraph__codegraph_status",
+      "mcp__linear-server__get_document",
       "mcp__linear-server__get_issue",
-      "mcp__linear-server__list_comments",
-      "mcp__linear-server__list_projects",
+      "mcp__linear-server__get_issue_status",
       "mcp__linear-server__get_project",
-      "mcp__linear-server__list_teams",
       "mcp__linear-server__get_team",
-      "mcp__linear-server__list_users",
       "mcp__linear-server__get_user",
+      "mcp__linear-server__list_comments",
       "mcp__linear-server__list_cycles",
       "mcp__linear-server__list_documents",
-      "mcp__linear-server__get_document",
-      "mcp__linear-server__list_my_issues",
       "mcp__linear-server__list_issue_labels",
       "mcp__linear-server__list_issue_statuses",
-      "mcp__linear-server__get_issue_status",
+      "mcp__linear-server__list_issues",
+      "mcp__linear-server__list_my_issues",
       "mcp__linear-server__list_project_labels",
-      "mcp__linear-server__search_documentation",
-      "Bash(glab mr view:*)",
-      "Bash(glab mr diff:*)"
+      "mcp__linear-server__list_projects",
+      "mcp__linear-server__list_teams",
+      "mcp__linear-server__list_users",
+      "mcp__linear-server__search_documentation"
     ],
     "defaultMode": "auto"
   },
   "model": "opus",
-  "preferredNotifChannel": "notifications_disabled",
   "hooks": {
     "PreToolUse": [
       {
@@ -136,7 +134,8 @@
     "claude-code-setup@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "llm-wiki@llm-wiki": true
+    "llm-wiki@llm-wiki": true,
+    "dev@internal-plugins": true
   },
   "extraKnownMarketplaces": {
     "llm-wiki": {
@@ -146,12 +145,13 @@
       }
     }
   },
-  "alwaysThinkingEnabled": false,
   "effortLevel": "high",
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
   "theme": "light",
-  "teammateMode": "auto",
+  "preferredNotifChannel": "notifications_disabled",
+  "teammateMode": "in-process",
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": false
 }
