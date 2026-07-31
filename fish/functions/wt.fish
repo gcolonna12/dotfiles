@@ -26,6 +26,24 @@ function wt --description 'git worktree helpers'
             set -l repo_name (basename $main_root)
             mkdir -p "$target/.vscode"
             printf '{\n    "window.title": "${dirty}%s — %s"\n}\n' $repo_name $branch >"$target/.vscode/settings.json"
+            # Gitignored-but-required files (secrets, local config) don't come
+            # across with the checkout; .worktreeinclude lists what to carry in.
+            if test -f "$main_root/.worktreeinclude"
+                for entry in (cat "$main_root/.worktreeinclude")
+                    set entry (string trim -- $entry)
+                    if test -z "$entry"; or string match -q '#*' -- $entry
+                        continue
+                    end
+                    test -e "$main_root/$entry"; or continue
+                    mkdir -p (dirname "$target/$entry")
+                    cp -R "$main_root/$entry" "$target/$entry"
+                end
+            end
+            # A codegraph index records the files of one checkout, so it can be
+            # neither shared nor copied — each worktree needs its own.
+            if test -d "$main_root/.codegraph"; and command -q codegraph
+                codegraph init "$target"
+            end
             cd $target
 
         case list ls
