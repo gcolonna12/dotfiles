@@ -19,7 +19,13 @@ function wt --description 'git worktree helpers'
             # Flatten slashed branch names so feature/foo → one dir, not nested.
             set -l slug (string replace --all / - $branch)
             set -l target "$main_root/.worktrees/$slug"
-            git worktree add $target $branch $argv
+            # Check out an existing branch; create it when it doesn't exist yet
+            # (plain `git worktree add <path> <branch>` dies on an unknown ref).
+            if git show-ref --verify --quiet "refs/heads/$branch"
+                git worktree add $target $branch $argv
+            else
+                git worktree add -b $branch $target $argv
+            end
             or return 1
             # VS Code title vars can't recover the repo name inside a worktree
             # (they read the opened folder), so write the title in per-worktree.
