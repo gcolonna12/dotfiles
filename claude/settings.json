@@ -134,7 +134,9 @@
     "claude-code-setup@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
     "llm-wiki@llm-wiki": true,
+    "understand-anything@understand-anything": true,
     "dev@internal-plugins": true
   },
   "extraKnownMarketplaces": {
@@ -142,6 +144,12 @@
       "source": {
         "source": "github",
         "repo": "praneybehl/llm-wiki-plugin"
+      }
+    },
+    "understand-anything": {
+      "source": {
+        "source": "github",
+        "repo": "Egonex-AI/Understand-Anything"
       }
     }
   },

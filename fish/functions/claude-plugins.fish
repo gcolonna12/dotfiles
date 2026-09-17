@@ -11,10 +11,13 @@
 # rejected. Individual plugin dirs each have their own plugin.json, so they load
 # directly from local files. (llm-wiki root works because it IS a plugin.)
 #
-# Only plugins with local content can be loaded this way. Remote-reference
-# plugins (e.g. the *-lsp plugins) ship content-less stubs upstream; pyright-lsp
-# is provided instead from local-plugins/ (dotfiles-managed, symlinked by
-# install.sh) with its lspServers block in plugin.json.
+# Only plugins with local content can be loaded this way. A marketplace entry
+# whose source is a remote repo (superpowers, understand-anything) is fetched
+# into cache/<marketplace>/<plugin>/<version>/ instead of the marketplace tree,
+# so it does have local content once installed -- those paths are resolved by
+# version below. The *-lsp plugins are the genuine exception: their upstream
+# entries are content-less stubs, so pyright-lsp is provided from local-plugins/
+# instead (dotfiles-managed, symlinked by install.sh) with its lspServers block.
 #
 # `claude-plugins --update` git-pulls the llm-wiki checkout (the only source
 # that is a real clone). The official plugins are synced by Claude Code and
@@ -22,6 +25,7 @@
 function claude-plugins --description 'run claude with curated local plugins force-loaded'
     set -l official "$HOME/.claude/plugins/marketplaces/claude-plugins-official/plugins"
     set -l llm_wiki "$HOME/.claude/plugins/marketplaces/llm-wiki"
+    set -l cache "$HOME/.claude/plugins/cache"
 
     if test "$argv[1]" = --update
         if test -d "$llm_wiki/.git"
@@ -41,6 +45,19 @@ function claude-plugins --description 'run claude with curated local plugins for
         "$official/claude-code-setup" \
         "$HOME/.claude/local-plugins/pyright-lsp" \
         "$HOME/.claude/local-plugins/codegraph"
+
+    # Cached remote-source plugins: take the highest version installed (fish sorts
+    # glob results numerically). Falling back to the bare path when nothing is
+    # installed lets the check below report it as a normal skip.
+    for cached in "$cache/claude-plugins-official/superpowers" \
+        "$cache/understand-anything/understand-anything"
+        set -l versions $cached/*/
+        if set -q versions[1]
+            set -a dirs $versions[-1]
+        else
+            set -a dirs $cached
+        end
+    end
 
     set -l flags
     for d in $dirs
