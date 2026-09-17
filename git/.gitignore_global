@@ -26,3 +26,5 @@ Thumbs.db
 
 # Git worktrees created by the `wt` helper, kept inside the repo
 .worktrees/
+
+**/.claude/.cc-writes/
