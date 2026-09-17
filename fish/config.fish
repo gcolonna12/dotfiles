@@ -59,3 +59,7 @@ if command -q direnv
         direnv export fish | source
     end
 end
+
+
+# Added by Antigravity CLI installer
+set -gx PATH "/Users/gianpi/.local/bin" $PATH

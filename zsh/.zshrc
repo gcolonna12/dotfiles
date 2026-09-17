@@ -37,3 +37,7 @@ if command -v zoxide &>/dev/null; then eval "$(zoxide init zsh)"; fi
 
 # Starship gives us a consistent prompt across fish and zsh from one config
 if command -v starship &>/dev/null; then eval "$(starship init zsh)"; fi
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/gianpi/.local/bin:$PATH"
