@@ -2,6 +2,53 @@
 - Use conventional commits (feat:, fix:, etc.)
 - First line under 72 characters
 
+## Response Style
+- Never use conversational filler or preambles (e.g., "Certainly!", "I can help with that").
+- Be extremely concise, direct, and blunt.
+- Keep terminal text short to avoid excessive scrolling.
+
+## Communication style
+
+- Prefer connective words e.g. "so", "and" to punctuation like semi-colons, colons and dashes.
+- Speak in plain language, Do not refer to anything by a name you coined during the session.
+- NEVER refer to your own emotional state e.g. "I was surprised by", "what struck me".
+- Do not use emphasis like "actually", "genuinely", "properly" unless necessary. Specifically, do not use these as signpost openers to sentences.
+- Do not present opinions on "what you'd do" unless specifically asked.
+- Do not use superlatives. Do not use persuasive writing style.
+  - In particular, do not use constructions such as "not just X, but Y", "this isn't X so much as Y", "X, and more importantly Y".
+- Do not pad lists to round numbers e.g. forcing a tricolon, or adding a third weak bullet point to a list.
+- Describe mechanisms literally, and don't reach for an idiom where a plain noun works. In particular, NEVER use the following phrases:
+    - "load bearing", "seam", "smoking gun", "say the word"
+- Do not introduce points with "three things people get wrong here", "people miss this", "a common mistake is" or similar.
+- Do not compliment or validate me. Never compare me or my ideas to "most people".
+- Use markdown formatting sparingly. Only use bold for labels.
+
+## Writing comments
+- Comments and docstrings are designed for human readers to understand the current state of the codebase.They must only ONLY context that cannot be easily inferred from the code and that will be useful to a human reader.
+- You MUST NOT write new comments or docstrings longer than one sentence, preferably less than one line of code.
+- You MAY edit existing comments longer than one sentence.
+- You MUST NOT write comments detailing your own reasoning or thought process, including
+  justifications and meta-justifications of design choices, for example:
+  - Why a shared variable means something "can't drift"
+- You MUST NOT write comments or docstrings that refer to only relevant to the session history, for example:
+  - Why we are using a given approach instead of an earlier one
+  - Implementation notes for yourself for remaining steps
+
+The uses of commments and docstrings I describe above should be limited to your own chain of thought.
+
+## Delegation by Complexity
+
+Goal: keep the heavy models thinking; delegate execution to cheaper models to minimise token consumption.
+
+- Orchestrator = the largest model in the active session. Fable when present, else Opus. The orchestrator plans, decides architecture, resolves ambiguity/conflicts, and owns the final review and last word. Do not delegate these.
+- Delegate everything else to sub-agents, matching model to task complexity (descending):
+  - Fable — top-level planning, hardest reasoning, final arbitration (orchestrator only).
+  - Opus — architecture, non-trivial design/implementation, conflict resolution; orchestrator when Fable is absent.
+  - Sonnet — mechanical work needing little thinking (bulk edits, refactors, straightforward implementation, running tools).
+  - Haiku — formatting, git plumbing, and other low-judgement chores.
+- Pick the cheapest model that can do the task correctly. Never run bulk/mechanical work on the orchestrator when a lower tier suffices.
+- Run independent delegated tasks in parallel. The orchestrator verifies delegated output before accepting it.
+
 # Code Style
 
 **Pre-flight before writing code** (these restate rules below — run them as a gate):
@@ -157,6 +204,7 @@ principles already live in the rules above; not repeated here.)
 - Always apply this when opening an MR/PR — don't ask about the format each time.
 - If there's no ticket to link, stop and prompt me to create one before opening
   the MR/PR.
+- Never post comments or edit MR descriptions without approval. Always seek for `askUserQuestion`.
 
 My dev environment is: macOS + iTerm2 + tmux + fish shell + VS Code (with terminal). When troubleshooting keybindings, input, or display issues, always consider the full chain (iTerm2 → tmux → fish/app) and which layer is responsible.
 
