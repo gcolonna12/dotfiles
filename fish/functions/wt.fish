@@ -19,12 +19,18 @@ function wt --description 'git worktree helpers'
             # Flatten slashed branch names so feature/foo → one dir, not nested.
             set -l slug (string replace --all / - $branch)
             set -l target "$main_root/.worktrees/$slug"
-            # Check out an existing branch; create it when it doesn't exist yet
-            # (plain `git worktree add <path> <branch>` dies on an unknown ref).
+            # Check out an existing branch; create it off a freshly fetched
+            # origin/HEAD when it doesn't exist yet.
             if git show-ref --verify --quiet "refs/heads/$branch"
                 git worktree add $target $branch $argv
             else
-                git worktree add -b $branch $target $argv
+                git -C $main_root fetch origin
+                or return 1
+                set -l base (git -C $main_root symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)
+                test -z "$base"; and set base origin/main
+                # --no-track: branching off a remote ref would otherwise set
+                # origin/HEAD as the upstream of the new branch.
+                git worktree add --no-track -b $branch $target $base $argv
             end
             or return 1
             # VS Code title vars can't recover the repo name inside a worktree
@@ -44,6 +50,10 @@ function wt --description 'git worktree helpers'
                     mkdir -p (dirname "$target/$entry")
                     cp -R "$main_root/$entry" "$target/$entry"
                 end
+            end
+            # direnv trusts .envrc per path, so a fresh worktree is untrusted.
+            if test -f "$target/.envrc"; and command -q direnv
+                direnv allow "$target"
             end
             # A codegraph index records the files of one checkout, so it can be
             # neither shared nor copied — each worktree needs its own.
@@ -121,6 +131,7 @@ function wt --description 'git worktree helpers'
             echo ""
             echo "commands:"
             echo "  add <branch>   create worktree at <main-repo>/.worktrees/<slug>/ (flat) and cd into it"
+            echo "                 a new branch is fetched and branched off origin/HEAD"
             echo "  list           list all worktrees for the current repo"
             echo "  remove <path>  remove a worktree"
             echo "  clean [--force]  remove worktrees merged into origin/HEAD, skipping dirty ones (dry-run by default)"
