@@ -78,6 +78,7 @@ system defaults when they're absent. On constrained devices (small RAM, limited 
 | [Claude Code](https://claude.ai/code) | AI coding assistant |
 | [Raycast](https://www.raycast.com/) | Launcher and productivity tool |
 | [Stats](https://github.com/exelban/stats) | Menu bar system monitor |
+| [Burly](https://www.burly.click) | Browser and profile picker for links (set as default browser in System Settings) |
 
 ## Post-install setup
 

@@ -33,6 +33,16 @@ if [ "$OS" = "Darwin" ]; then
         # Clear Gatekeeper quarantine on claude — macOS blocks unsigned/unnotarized CLIs
         xattr -d com.apple.quarantine "$(command -v claude)" 2>/dev/null || true
 
+        # Burly has no Homebrew cask; Sparkle keeps it updated after install.
+        if [ ! -d /Applications/Burly.app ]; then
+            BURLY_DMG="$(mktemp -d)/Burly.dmg"
+            curl -fsSL -o "$BURLY_DMG" https://storage.googleapis.com/burly-prod.firebasestorage.app/releases/v1.4.0/Burly-1.4.0.dmg
+            BURLY_MNT="$(hdiutil attach -nobrowse -readonly "$BURLY_DMG" | awk -F'\t' '/\/Volumes\//{print $NF}')"
+            cp -R "$BURLY_MNT/Burly.app" /Applications/
+            hdiutil detach "$BURLY_MNT" -quiet
+            rm -f "$BURLY_DMG"
+        fi
+
         echo "=== Language servers (Claude Code intelligence) ==="
         npm install -g pyright typescript-language-server typescript @colbymchenry/codegraph
 
